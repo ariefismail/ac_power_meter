@@ -1,0 +1,4 @@
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+CStm32F10xGpio.cpp:10:1:Stm32F10xGpio::Stm32F10xGpio()	16	static
+CStm32F10xGpio.cpp:16:1:Stm32F10xGpio::~Stm32F10xGpio()	16	static
+CStm32F10xGpio.cpp:16:1:virtual Stm32F10xGpio::~Stm32F10xGpio()	16	static

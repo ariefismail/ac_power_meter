@@ -1,0 +1,4 @@
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+STM32F10xUSART.cpp:10:1:CSTM32F10xUSART::CSTM32F10xUSART()	16	static
+STM32F10xUSART.cpp:16:1:CSTM32F10xUSART::~CSTM32F10xUSART()	16	static
+STM32F10xUSART.cpp:16:1:virtual CSTM32F10xUSART::~CSTM32F10xUSART()	16	static

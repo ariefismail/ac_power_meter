@@ -1,0 +1,4 @@
+STM32F10xRcc.cpp:10:6:static bool CSTM32F10xRcc::EnableHse(bool)	16	static
+STM32F10xRcc.cpp:16:1:CSTM32F10xRcc::CSTM32F10xRcc()	16	static
+STM32F10xRcc.cpp:22:1:CSTM32F10xRcc::~CSTM32F10xRcc()	16	static
+STM32F10xRcc.cpp:22:1:virtual CSTM32F10xRcc::~CSTM32F10xRcc()	16	static
