@@ -60,6 +60,8 @@ int main(void)
 	gpio.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOB, &gpio);
 
+	CSTM32F10xUSART Uart;
+
 	USART_InitTypeDef usart;
 	usart.USART_BaudRate = 115200;
 	usart.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
@@ -69,16 +71,6 @@ int main(void)
 	usart.USART_WordLength = USART_WordLength_8b;
 	USART_Init(USART3, &usart);
 	USART_DMACmd(USART3, USART_DMAReq_Rx, ENABLE);
-
-	DMA_InitTypeDef dma;
-	DMA_StructInit(&dma);
-	dma.DMA_BufferSize = 322;
-	dma.DMA_DIR = DMA_DIR_PeripheralSRC;
-	dma.DMA_Priority = DMA_Priority_VeryHigh;
-	dma.DMA_MemoryInc = DMA_MemoryInc_Enable;
-	dma.DMA_Mode = DMA_Mode_Circular;
-	DMA_Init(DMA1_Channel3, &dma);
-	DMA_Cmd(DMA1_Channel3, ENABLE);
 
 	USART_Cmd(USART3, ENABLE);
 	// -----------------------------------------------------------------
@@ -98,6 +90,7 @@ int main(void)
 	while (1)
 	{
 		HeartBeat.Execute();
+		Uart.Execute();
 	}
 }
 

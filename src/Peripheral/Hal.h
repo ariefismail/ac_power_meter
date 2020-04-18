@@ -39,6 +39,7 @@ public:
 	virtual uint16_t Write(const char* data) = 0;
 	virtual bool HasData() = 0;
 	virtual bool Read(unsigned char* pData, uint16_t* pLength) = 0;
+	virtual char ReadByte() = 0;
 };
 
 #endif /* PERIPHERAL_HAL_H_ */
