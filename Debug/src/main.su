@@ -1,2 +1,26 @@
+new:146:14:void* operator new(std::size_t, void*)	16	static
 gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
-main.cpp:12:5:int main()	784	static
+functional:1458:17:void* std::_Any_data::_M_access()	16	static
+functional:1459:17:const void* std::_Any_data::_M_access() const	16	static
+functional:1685:5:std::_Function_base::_Function_base()	16	static
+AnalogInput.h:30:8:CAnalogInput::CAnalogInput()	16	static
+AnalogInput.h:37:8:CAnalogInput::~CAnalogInput()	16	static
+AnalogInput.h:37:8:virtual CAnalogInput::~CAnalogInput()	16	static
+AnalogInput.h:42:13:void CAnalogInput::Initialize(IAdc*)	16	static
+AnalogInput.h:52:6:void CAnalogInput::SetConfig(float, float)	24	static
+main.cpp:17:5:int main()	968	static
+functional:525:12:constexpr std::_Maybe_unary_or_binary_function<void>::_Maybe_unary_or_binary_function()	16	static
+move.h:101:5:constexpr typename std::remove_reference< <template-parameter-1-1> >::type&& std::move(_Tp&&) [with _Tp = void (*&)()]	16	static
+functional:2106:7:)>::function(_Functor) [with _Functor = void (*)(); <template-parameter-2-2> = void; <template-parameter-2-3> = void; _Res = void; _ArgTypes = {}]	24	static
+functional:1627:4:static bool std::_Function_base::_Base_manager<_Functor>::_M_not_empty_function(_Tp*) [with _Tp = void(); _Functor = void (*)()]	16	static
+functional:1617:2:static void std::_Function_base::_Base_manager<_Functor>::_M_init_functor(std::_Any_data&, _Functor&&) [with _Functor = void (*)()]	32	static
+functional:1729:7:) [with _Functor = void (*)(); _ArgTypes = {}]	16	static
+functional:1591:2:static bool std::_Function_base::_Base_manager<_Functor>::_M_manager(std::_Any_data&, const std::_Any_data&, std::_Manager_operation) [with _Functor = void (*)()]	40	static
+functional:1642:2:static void std::_Function_base::_Base_manager<_Functor>::_M_init_functor(std::_Any_data&, _Functor&&, std::true_type) [with _Functor = void (*)()]	32	static
+functional:1549:2:static _Functor* std::_Function_base::_Base_manager<_Functor>::_M_get_pointer(const std::_Any_data&) [with _Functor = void (*)()]	24	static
+functional:1463:7:_Tp& std::_Any_data::_M_access() [with _Tp = void (**)()]	16	static
+functional:1560:2:static void std::_Function_base::_Base_manager<_Functor>::_M_clone(std::_Any_data&, const std::_Any_data&, std::true_type) [with _Functor = void (*)()]	32	static
+functional:1577:2:static void std::_Function_base::_Base_manager<_Functor>::_M_destroy(std::_Any_data&, std::true_type) [with _Functor = void (*)()]	16	static
+functional:1468:7:const _Tp& std::_Any_data::_M_access() const [with _Tp = void (*)()]	16	static
+move.h:47:5:_Tp* std::__addressof(_Tp&) [with _Tp = void (* const)()]	16	static
+functional:1463:7:_Tp& std::_Any_data::_M_access() [with _Tp = void (*)()]	16	static

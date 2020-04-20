@@ -81,6 +81,7 @@
 									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ac_power/src/Peripheral}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ac_power/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ac_power/src/DMD}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1507717398" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1450311539" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F103C8" valueType="enumerated"/>
@@ -102,6 +103,7 @@
 								<option id="com.atollic.truestudio.common_options.target.fpu.637609846" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu"/>
 								<option id="com.atollic.truestudio.ldcc.optimization.do_garbage.767705601" name="Dead code removal" superClass="com.atollic.truestudio.ldcc.optimization.do_garbage" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.ldcc.general.scriptfile.1071029704" name="Linker script" superClass="com.atollic.truestudio.ldcc.general.scriptfile" value="../stm32_flash.ld" valueType="string"/>
+								<option id="com.atollic.truestudio.ldcc.optimization.malloc_page_size.1061591624" name="Page size allocation for malloc() " superClass="com.atollic.truestudio.ldcc.optimization.malloc_page_size" useByScannerDiscovery="false" value="com.atollic.truestudio.ldcc.optimization.malloc_page_size.128" valueType="enumerated"/>
 								<inputType id="com.atollic.truestudio.ldcc.input.1206793565" name="Input" superClass="com.atollic.truestudio.ldcc.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -111,6 +113,38 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1210984447" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput">
 								<option id="com.atollic.truestudio.secoutput.general.convert.1454399251" name="Convert build output" superClass="com.atollic.truestudio.secoutput.general.convert" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 							</tool>
+						</toolChain>
+					</folderInfo>
+					<folderInfo id="com.atollic.truestudio.exe.debug.337087765.1621398916" name="/" resourcePath="src">
+						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.821118622" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
+							<option id="com.atollic.truestudio.general.runtimelib.1772766567.1736738664" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.1772766567"/>
+							<option id="com.atollic.truestudio.toolchain_options.mcu.1480435065.34622692" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.1480435065"/>
+							<option id="com.atollic.truestudio.toolchain_options.vendor.1220875170.1923210696" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.1220875170"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform" isAbstract="false" name="Debug platform" osList="all" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.1614966977" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.1911498408">
+								<inputType id="com.atollic.truestudio.as.input.1725572371" name="Input" superClass="com.atollic.truestudio.as.input"/>
+							</tool>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.140954330" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1018982204">
+								<inputType id="com.atollic.truestudio.gcc.input.1138006952" superClass="com.atollic.truestudio.gcc.input"/>
+							</tool>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.492913563" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.966732403"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.993387986" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.891990538">
+								<option id="com.atollic.truestudio.gpp.directories.select.653521758" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
+									<listOptionValue builtIn="false" value="../src"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/Utilities}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/Device}&quot;"/>
+									<listOptionValue builtIn="false" value="../Libraries/STM32F10x_StdPeriph_Driver/inc"/>
+									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Device/ST/STM32F10x/Include"/>
+									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ac_power/src/Peripheral}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ac_power/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ac_power/src/Sensor}&quot;"/>
+								</option>
+								<inputType id="com.atollic.truestudio.gpp.input.1669379246" superClass="com.atollic.truestudio.gpp.input"/>
+							</tool>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.491039318" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc.963776037"/>
+							<tool id="com.atollic.truestudio.ar.base.1483023718" name="Archiver" superClass="com.atollic.truestudio.ar.base.1083055306"/>
+							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1019197303" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.1210984447"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>

@@ -42,4 +42,34 @@ public:
 	virtual char ReadByte() = 0;
 };
 
+class ISpi
+{
+	virtual void Transfer(char *data,uint16_t lenght) = 0;
+};
+
+class IAdc
+{
+public:
+	virtual uint16_t Read() = 0;
+};
+
+class IInputCapture
+{
+public:
+	virtual bool IsTriggered() const = 0;
+	virtual uint16_t Read() const = 0;
+};
+
+class IDma
+{
+public:
+	virtual void Start() = 0;
+	virtual void Stop() = 0;
+	virtual void SetDirection(uint32_t direction) = 0; // 0 = PerToMem , 1 = MemToPer
+	virtual void SetAddress(uint32_t src, uint32_t dst) = 0;
+	virtual uint16_t GetDataIndex() = 0;
+	virtual void SetBufferSize(uint16_t size) = 0;
+	virtual bool IsTransferFinished() = 0;
+};
+
 #endif /* PERIPHERAL_HAL_H_ */
