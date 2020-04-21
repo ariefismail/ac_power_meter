@@ -128,16 +128,21 @@ int main(void)
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 	ADC_StartCalibration(ADC1);
 
-
 	// -----------------------------------------------------------------
 
 	// ------------------------- Init input capture ------------------------------
-//	TIM_ICInitTypeDef sInputCapture;
-//	TIM_ICStructInit(&sInputCapture);
-//	sInputCapture.TIM_Channel = TIM_Channel_1;
-//	TIM_ICInit(TIM3, &sInputCapture);
-//	CSTM32F10xInputCapture InputCapture;
-//	InputCapture.Init(TIM3, TIM_Channel_1);
+	GPIO_StructInit(&sGpio);
+	sGpio.GPIO_Pin = GPIO_Pin_6; // tim3 channel 1
+	sGpio.GPIO_Mode = GPIO_Mode_AF_OD;
+	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_Init(GPIOA, &sGpio);
+
+	TIM_ICInitTypeDef sInputCapture;
+	TIM_ICStructInit(&sInputCapture);
+	sInputCapture.TIM_Channel = TIM_Channel_1;
+	TIM_ICInit(TIM3, &sInputCapture);
+	CSTM32F10xInputCapture InputCapture;
+	InputCapture.Init(TIM3, TIM_Channel_1);
 
 	// ------------------------- Init p10 ------------------------------
 	// spi init
@@ -179,28 +184,17 @@ int main(void)
 
 	// init our basic need !
 	// frequency meter
-//	CACFrequencyMeter ACFrequencyMeter;
-//	ACFrequencyMeter.Init(&InputCapture);
+	CACFrequencyMeter ACFrequencyMeter;
+	ACFrequencyMeter.Init(&InputCapture);
 	// voltage and current measurement
 	CAnalogInput AnalogInput[2];
 	for (uint16_t i = 0; i < 2; i++)
 	{
 		AnalogInput[i].Initialize(&Adc[i]);
 	}
-	Uart.Write("haha");
-	CTimeout timeout;
-	timeout.Init(&MainTimer);
-	timeout.SetExpiry(10000);
 	while (1)
 	{
-//		ACFrequencyMeter.Execute();
-		if (timeout.HasElapsed())
-		{
-			timeout.Reset();
-			char buf[30];
-			sprintf(buf, "%d,%d\r\n", adcBuffer[0], adcBuffer[1]);
-			Uart.Write(buf);
-		}
+		ACFrequencyMeter.Execute();
 		HeartBeat.Execute();
 		Uart.Execute();
 	}
