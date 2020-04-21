@@ -1,7 +1,5 @@
-gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
-Hal.h:22:7:void IGpio::Toggle()	16	static
-HeartBeat.cpp:10:6:void CHeartBeat::Init(IGpio*, ITimer*, uint16_t)	24	static
+HeartBeat.cpp:10:6:void CHeartBeat::Init(IGpio*, ITimer*, uint16_t)	16	static
 HeartBeat.cpp:17:6:void CHeartBeat::Execute()	16	static
-HeartBeat.cpp:25:1:CHeartBeat::CHeartBeat()	16	static
-HeartBeat.cpp:31:1:CHeartBeat::~CHeartBeat()	16	static
-HeartBeat.cpp:31:1:virtual CHeartBeat::~CHeartBeat()	16	static
+HeartBeat.cpp:26:1:CHeartBeat::CHeartBeat()	8	static
+HeartBeat.cpp:32:1:CHeartBeat::~CHeartBeat()	8	static
+HeartBeat.cpp:32:1:virtual CHeartBeat::~CHeartBeat()	8	static

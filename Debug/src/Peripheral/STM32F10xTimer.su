@@ -1,7 +1,5 @@
-gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
-STM32F10xTimer.cpp:10:6:void CSTM32F10xTimer::Init(TIM_TypeDef*)	16	static
-STM32F10xTimer.cpp:15:10:virtual uint16_t CSTM32F10xTimer::CurrentTicks() const	16	static
-Hal.h:29:7:constexpr ITimer::ITimer()	16	static
-STM32F10xTimer.cpp:20:1:CSTM32F10xTimer::CSTM32F10xTimer()	16	static
-STM32F10xTimer.cpp:26:1:CSTM32F10xTimer::~CSTM32F10xTimer()	16	static
-STM32F10xTimer.cpp:26:1:virtual CSTM32F10xTimer::~CSTM32F10xTimer()	16	static
+STM32F10xTimer.cpp:15:10:virtual uint16_t CSTM32F10xTimer::CurrentTicks() const	0	static
+STM32F10xTimer.cpp:26:1:CSTM32F10xTimer::~CSTM32F10xTimer()	0	static
+STM32F10xTimer.cpp:26:1:virtual CSTM32F10xTimer::~CSTM32F10xTimer()	8	static
+STM32F10xTimer.cpp:10:6:void CSTM32F10xTimer::Init(TIM_TypeDef*)	0	static
+STM32F10xTimer.cpp:20:1:CSTM32F10xTimer::CSTM32F10xTimer()	0	static

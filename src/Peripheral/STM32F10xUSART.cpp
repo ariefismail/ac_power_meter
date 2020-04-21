@@ -23,7 +23,7 @@ uint16_t CSTM32F10xUSART::Write(const char* data)
 {
 	uint16_t dataSend = 0;
 	char txData;
-	while (data)
+	while (*data)
 	{
 		txData = *data++;
 		if (m_TxBuffer.Push(txData)) dataSend++;
@@ -58,8 +58,8 @@ void CSTM32F10xUSART::Init(USART_TypeDef *pUsart)
 
 void CSTM32F10xUSART::Execute()
 {
-	executeRx();
 	executeTx();
+	executeRx();
 }
 
 void CSTM32F10xUSART::executeRx()

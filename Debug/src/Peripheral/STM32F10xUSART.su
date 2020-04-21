@@ -1,21 +1,18 @@
-gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+STM32F10xUSART.cpp:40:6:virtual bool CSTM32F10xUSART::Read(unsigned char*, uint16_t*)	0	static
+STM32F10xUSART.cpp:87:1:CSTM32F10xUSART::~CSTM32F10xUSART()	0	static
+CircularFifo.h:30:10:CCircularFifo<Element, Size>::~CCircularFifo() [with Element = char; unsigned int Size = 322u]	0	static
+CircularFifo.h:30:10:CCircularFifo<Element, Size>::~CCircularFifo() [with Element = char; unsigned int Size = 322u]	8	static
+STM32F10xUSART.cpp:87:1:virtual CSTM32F10xUSART::~CSTM32F10xUSART()	8	static
+STM32F10xUSART.cpp:54:6:void CSTM32F10xUSART::Init(USART_TypeDef*)	0	static
+STM32F10xUSART.cpp:81:1:CSTM32F10xUSART::CSTM32F10xUSART()	0	static
+CircularFifo.h:94:6:bool CCircularFifo<Element, Size>::IsEmpty() const [with Element = char; unsigned int Size = 322u]	0	static
+STM32F10xUSART.cpp:35:6:virtual bool CSTM32F10xUSART::HasData()	8	static
+CircularFifo.h:117:14:unsigned int CCircularFifo<Element, Size>::increment(unsigned int) const [with Element = char; unsigned int Size = 322u]	0	static
+CircularFifo.h:58:6:bool CCircularFifo<Element, Size>::Push(Element&) [with Element = char; unsigned int Size = 322u]	16	static
 STM32F10xUSART.cpp:10:10:virtual uint16_t CSTM32F10xUSART::Write(const char*, uint16_t)	32	static
 STM32F10xUSART.cpp:22:10:virtual uint16_t CSTM32F10xUSART::Write(const char*)	24	static
-STM32F10xUSART.cpp:35:6:virtual bool CSTM32F10xUSART::HasData()	16	static
-STM32F10xUSART.cpp:40:6:virtual bool CSTM32F10xUSART::Read(unsigned char*, uint16_t*)	24	static
-STM32F10xUSART.cpp:47:6:virtual char CSTM32F10xUSART::ReadByte()	24	static
-STM32F10xUSART.cpp:54:6:void CSTM32F10xUSART::Init(USART_TypeDef*)	16	static
-STM32F10xUSART.cpp:59:6:void CSTM32F10xUSART::Execute()	16	static
-STM32F10xUSART.cpp:65:6:void CSTM32F10xUSART::executeRx()	24	static
+STM32F10xUSART.cpp:65:6:void CSTM32F10xUSART::executeRx()	16	static
+CircularFifo.h:79:6:bool CCircularFifo<Element, Size>::Pop(Element&) [with Element = char; unsigned int Size = 322u]	8	static
+STM32F10xUSART.cpp:47:6:virtual char CSTM32F10xUSART::ReadByte()	16	static
 STM32F10xUSART.cpp:72:6:void CSTM32F10xUSART::executeTx()	24	static
-Hal.h:35:7:constexpr IUsart::IUsart()	16	static
-STM32F10xUSART.cpp:81:1:CSTM32F10xUSART::CSTM32F10xUSART()	16	static
-STM32F10xUSART.cpp:87:1:CSTM32F10xUSART::~CSTM32F10xUSART()	16	static
-STM32F10xUSART.cpp:87:1:virtual CSTM32F10xUSART::~CSTM32F10xUSART()	16	static
-CircularFifo.h:58:6:bool CCircularFifo<Element, Size>::Push(Element&) [with Element = char; unsigned int Size = 322u]	24	static
-CircularFifo.h:94:6:bool CCircularFifo<Element, Size>::IsEmpty() const [with Element = char; unsigned int Size = 322u]	16	static
-CircularFifo.h:79:6:bool CCircularFifo<Element, Size>::Pop(Element&) [with Element = char; unsigned int Size = 322u]	16	static
-CircularFifo.h:29:2:CCircularFifo<Element, Size>::CCircularFifo() [with Element = char; unsigned int Size = 322u]	16	static
-CircularFifo.h:30:10:CCircularFifo<Element, Size>::~CCircularFifo() [with Element = char; unsigned int Size = 322u]	16	static
-CircularFifo.h:30:10:CCircularFifo<Element, Size>::~CCircularFifo() [with Element = char; unsigned int Size = 322u]	16	static
-CircularFifo.h:117:14:unsigned int CCircularFifo<Element, Size>::increment(unsigned int) const [with Element = char; unsigned int Size = 322u]	16	static
+STM32F10xUSART.cpp:59:6:void CSTM32F10xUSART::Execute()	8	static

@@ -18,6 +18,7 @@ void CHeartBeat::Execute()
 {
 	if(!m_timer.HasElapsed())
 		return;
+	m_timer.Reset();
 	m_pIo->Toggle();
 
 }

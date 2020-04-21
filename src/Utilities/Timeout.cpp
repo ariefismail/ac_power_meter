@@ -26,7 +26,8 @@ void CTimeout::SetExpiry(uint16_t tick)
 
 bool CTimeout::HasElapsed()
 {
-	if (!m_hasElapsed) if (m_timer->CurrentTicks() - m_prevTimer >= m_expiry) m_hasElapsed = true;
+	if (!m_hasElapsed)
+		if ((uint16_t)(m_timer->CurrentTicks() - m_prevTimer) >= m_expiry) m_hasElapsed = true;
 	return m_hasElapsed;
 }
 

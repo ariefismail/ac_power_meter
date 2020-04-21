@@ -1,8 +1,7 @@
-gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
-Timeout.cpp:10:6:void CTimeout::Init(ITimer*)	16	static
-Timeout.cpp:15:6:void CTimeout::Reset()	16	static
-Timeout.cpp:21:6:void CTimeout::SetExpiry(uint16_t)	16	static
-Timeout.cpp:27:6:bool CTimeout::HasElapsed()	16	static
-Timeout.cpp:33:1:CTimeout::CTimeout()	16	static
-Timeout.cpp:39:1:CTimeout::~CTimeout()	16	static
-Timeout.cpp:39:1:virtual CTimeout::~CTimeout()	16	static
+Timeout.cpp:40:1:CTimeout::~CTimeout()	0	static
+Timeout.cpp:40:1:virtual CTimeout::~CTimeout()	8	static
+Timeout.cpp:10:6:void CTimeout::Init(ITimer*)	0	static
+Timeout.cpp:15:6:void CTimeout::Reset()	8	static
+Timeout.cpp:21:6:void CTimeout::SetExpiry(uint16_t)	8	static
+Timeout.cpp:27:6:bool CTimeout::HasElapsed()	8	static
+Timeout.cpp:34:1:CTimeout::CTimeout()	0	static
