@@ -66,7 +66,7 @@ public:
 	virtual void Start() = 0;
 	virtual void Stop() = 0;
 	virtual void SetDirection(uint32_t direction) = 0; // 0 = PerToMem , 1 = MemToPer
-	virtual void SetAddress(uint32_t src, uint32_t dst) = 0;
+	virtual void SetAddress(uint32_t per, uint32_t mem) = 0;
 	virtual uint16_t GetDataIndex() = 0;
 	virtual void SetBufferSize(uint16_t size) = 0;
 	virtual bool IsTransferFinished() = 0;

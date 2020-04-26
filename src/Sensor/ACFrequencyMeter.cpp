@@ -16,7 +16,7 @@ void CACFrequencyMeter::Execute()
 {
 	if (!m_pIc->IsTriggered()) return;
 	m_CurrentTimeStamp = m_pIc->Read();
-	m_Freq = 10000 / (float)(m_CurrentTimeStamp - m_PrevTimeStamp);
+	m_Freq = 1000.0f / (uint16_t)(m_CurrentTimeStamp - m_PrevTimeStamp);
 	m_PrevTimeStamp = m_CurrentTimeStamp;
 }
 
@@ -28,6 +28,7 @@ float CACFrequencyMeter::ReadFrequency()
 CACFrequencyMeter::CACFrequencyMeter()
 {
 	// TODO Auto-generated constructor stub
+	m_Freq = 0;
 
 }
 

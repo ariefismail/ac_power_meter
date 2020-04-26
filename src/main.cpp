@@ -11,6 +11,7 @@
 #include <STM32F10xInputCapture.h>
 #include <STM32F10xDMA.h>
 
+#include <DMD\DMD.h>
 #include <ACFrequencyMeter.h>
 #include <AnalogInput.h>
 #include <HeartBeat.h>
@@ -22,7 +23,8 @@ int main(void)
 	SystemInit();
 	RCC_ADCCLKConfig(RCC_PCLK2_Div8);
 	// peripheral clock enable
-	uint32_t apb1Enable = RCC_APB1Periph_SPI2 | RCC_APB1Periph_TIM3 | RCC_APB1Periph_USART3;
+	uint32_t apb1Enable = RCC_APB1Periph_SPI2 | RCC_APB1Periph_TIM3 | RCC_APB1Periph_TIM2
+			| RCC_APB1Periph_USART3;
 	RCC_APB1PeriphClockCmd(apb1Enable, ENABLE);
 	uint32_t apb2Enable = RCC_APB2Periph_ADC1 | RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB
 			| RCC_APB2Periph_GPIOC;
@@ -30,13 +32,20 @@ int main(void)
 	uint32_t ahbEnable = RCC_AHBPeriph_DMA1;
 	RCC_AHBPeriphClockCmd(ahbEnable, ENABLE);
 
-	// main timer init
+	// frequency meter timer init
 	TIM_TimeBaseInitTypeDef timer;
 	TIM_TimeBaseStructInit(&timer);
 	timer.TIM_Period = 0xffff;
-	timer.TIM_Prescaler = 7199; // 100us timer period!
+	timer.TIM_Prescaler = 719; // 10us timer period!
 	TIM_TimeBaseInit(TIM3, &timer);
 	TIM_Cmd(TIM3, ENABLE);
+
+	// main timer init
+	TIM_TimeBaseStructInit(&timer);
+	timer.TIM_Period = 0xffff;
+	timer.TIM_Prescaler = 7199; // 100us timer period!
+	TIM_TimeBaseInit(TIM2, &timer);
+	TIM_Cmd(TIM2, ENABLE);
 
 	GPIO_InitTypeDef sGpio;
 	// heartbeat
@@ -46,7 +55,7 @@ int main(void)
 	GPIO_Init(GPIOC, &sGpio); // pc13
 
 	CSTM32F10xTimer MainTimer;
-	MainTimer.Init(TIM3);
+	MainTimer.Init(TIM2);
 	CSTM32F10xGpio GpioHeartBeat;
 	GpioHeartBeat.Init(GPIOC, 13);
 	CHeartBeat HeartBeat;
@@ -55,21 +64,21 @@ int main(void)
 	// --------------------------------------------------------------------
 
 	// --------------- INIT EEPROM ----------------------------------------
-	sGpio.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7; // sda1 scl1
-	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
-	sGpio.GPIO_Mode = GPIO_Mode_AF_OD;
-	GPIO_Init(GPIOB, &sGpio);
+//	sGpio.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7; // sda1 scl1
+//	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
+//	sGpio.GPIO_Mode = GPIO_Mode_AF_OD;
+//	GPIO_Init(GPIOB, &sGpio);
 
 	// --------------------------------------------------------------------
 
 	// --------------- UART Initialization -----------------------------
+	sGpio.GPIO_Pin = GPIO_Pin_11; // rx3
+	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
+	sGpio.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOB, &sGpio);
 	sGpio.GPIO_Pin = GPIO_Pin_10; // tx3
 	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
 	sGpio.GPIO_Mode = GPIO_Mode_AF_PP;
-	GPIO_Init(GPIOB, &sGpio);
-	sGpio.GPIO_Pin = GPIO_Pin_11; // rx3
-	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
-	sGpio.GPIO_Mode = GPIO_Mode_AF_OD;
 	GPIO_Init(GPIOB, &sGpio);
 
 	USART_InitTypeDef usart;
@@ -122,7 +131,7 @@ int main(void)
 	ADC_Init(ADC1, &adc);
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 1, ADC_SampleTime_239Cycles5);
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 2, ADC_SampleTime_239Cycles5);
-	ADC1->CR2 |= 7 << 17; // extenal trigger on software
+	ADC1->CR2 |= 7 << 17; // external trigger on software, NO SPL IMPLEMENTATION, WTF !!!
 	ADC_DMACmd(ADC1, ENABLE);
 	ADC_Cmd(ADC1, ENABLE);
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
@@ -133,52 +142,64 @@ int main(void)
 	// ------------------------- Init input capture ------------------------------
 	GPIO_StructInit(&sGpio);
 	sGpio.GPIO_Pin = GPIO_Pin_6; // tim3 channel 1
-	sGpio.GPIO_Mode = GPIO_Mode_AF_OD;
+	sGpio.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_Init(GPIOA, &sGpio);
 
 	TIM_ICInitTypeDef sInputCapture;
 	TIM_ICStructInit(&sInputCapture);
 	sInputCapture.TIM_Channel = TIM_Channel_1;
+	sInputCapture.TIM_ICSelection = TIM_ICSelection_DirectTI;
+	sInputCapture.TIM_ICPolarity = TIM_ICPolarity_Falling;
+	sInputCapture.TIM_ICFilter = 0x9;
 	TIM_ICInit(TIM3, &sInputCapture);
 	CSTM32F10xInputCapture InputCapture;
 	InputCapture.Init(TIM3, TIM_Channel_1);
 
 	// ------------------------- Init p10 ------------------------------
 	// spi init
-//	GPIO_StructInit(&sGpio);
-//	sGpio.GPIO_Pin = GPIO_Pin_15 | GPIO_Pin_14 | GPIO_Pin_13; // mosi2 miso2 sck
-//	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
-//	sGpio.GPIO_Mode = GPIO_Mode_AF_PP;
-//	GPIO_Init(GPIOB, &sGpio);
-//
-//	// output enable and chip select (SCLK)
-//	GPIO_StructInit(&sGpio);
-//	sGpio.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2;
-//	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
-//	sGpio.GPIO_Mode = GPIO_Mode_Out_PP;
-//	GPIO_Init(GPIOB, &sGpio);
-//
-//	// a pa9 , b pa8
-//	GPIO_StructInit(&sGpio);
-//	sGpio.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_8; // mosi2 miso2 sck
-//	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
-//	sGpio.GPIO_Mode = GPIO_Mode_Out_PP;
-//	GPIO_Init(GPIOA, &sGpio);
-//
-//	// spi DMA init
-//	CSTM32F10xDMA SpiDma;
-//	SpiDma.Init(DMA1,)
-//
-//	// spi init
-//	SPI_InitTypeDef spiStruct;
-//	SPI_StructInit(&spiStruct);
-//	spiStruct.SPI_Mode = SPI_Mode_Master;
-//	spiStruct.SPI_Direction = SPI_Direction_1Line_Tx;
-//	spiStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;
-//	spiStruct.SPI_NSS = SPI_NSS_Soft;
-//	SPI_Init(SPI2, &spiStruct);
-//	SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Tx, ENABLE);
+	GPIO_StructInit(&sGpio);
+	sGpio.GPIO_Pin = GPIO_Pin_15 | GPIO_Pin_13; // mosi2 sck
+	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
+	sGpio.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOB, &sGpio);
+
+	// output enable and chip select (SCLK)
+	GPIO_StructInit(&sGpio);
+	sGpio.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2;
+	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
+	sGpio.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOB, &sGpio);
+	CSTM32F10xGpio pOE;
+	pOE.Init(GPIOB, 1);
+	CSTM32F10xGpio pSS;
+	pSS.Init(GPIOB, 2);
+
+	// a pa9 , b pa8
+	GPIO_StructInit(&sGpio);
+	sGpio.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_8;
+	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
+	sGpio.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOA, &sGpio);
+	CSTM32F10xGpio pA;
+	pA.Init(GPIOA, 9);
+	CSTM32F10xGpio pB;
+	pB.Init(GPIOA, 8);
+
+	// spi DMA init
+	CSTM32F10xDMA SpiDma;
+	SpiDma.Init(DMA1, DMA1_Channel5, DMA_Mode_Normal, DMA_Priority_VeryHigh);
+
+	// spi init
+	SPI_InitTypeDef spiStruct;
+	SPI_StructInit(&spiStruct);
+	spiStruct.SPI_Mode = SPI_Mode_Master;
+	spiStruct.SPI_Direction = SPI_Direction_1Line_Tx;
+	spiStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;
+	spiStruct.SPI_NSS = SPI_NSS_Soft;
+	SPI_Init(SPI2, &spiStruct);
+	SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Tx, ENABLE);
+	SPI_Cmd(SPI2, ENABLE);
 
 	// ----------------------------------------------------------------
 
@@ -188,15 +209,30 @@ int main(void)
 	ACFrequencyMeter.Init(&InputCapture);
 	// voltage and current measurement
 	CAnalogInput AnalogInput[2];
+
+	DMD Dmd(2, 1);
+	Dmd.Init(SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE);
 	for (uint16_t i = 0; i < 2; i++)
 	{
 		AnalogInput[i].Initialize(&Adc[i]);
 	}
+	CTimeout timeout;
+	timeout.Init(&MainTimer);
+	timeout.SetExpiry(10000);
 	while (1)
 	{
 		ACFrequencyMeter.Execute();
+		Dmd.Execute();
 		HeartBeat.Execute();
 		Uart.Execute();
+		if (timeout.HasElapsed())
+		{
+			timeout.Reset();
+			float f = ACFrequencyMeter.ReadFrequency();
+			char buf[30];
+			sprintf(buf, "%u\r\n", (uint16_t)(f * 10000));
+			Uart.Write(buf);
+		}
 	}
 }
 

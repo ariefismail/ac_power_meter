@@ -18,7 +18,7 @@ public:
 	void Start();
 	void Stop();
 	void SetDirection(uint32_t direction); // 0 = PerToMem , 1 = MemToPer
-	void SetAddress(uint32_t src, uint32_t dst);
+	void SetAddress(uint32_t per, uint32_t mem);
 	uint16_t GetDataIndex();
 	void SetBufferSize(uint16_t size);
 	bool IsTransferFinished();

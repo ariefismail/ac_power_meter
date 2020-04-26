@@ -14,6 +14,9 @@ void CSTM32F10xDMA::Init(DMA_TypeDef *dma, DMA_Channel_TypeDef *pDmaChannel, uin
 	m_pDmaChannel = pDmaChannel;
 	m_DmaStruct.DMA_Mode = mode;
 	m_DmaStruct.DMA_Priority = priority;
+	m_DmaStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+	m_DmaStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+	m_DmaStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
 	DMA_Init(m_pDmaChannel, &m_DmaStruct);
 
 	if(m_pDmaChannel ==  DMA1_Channel1)m_DmaTCflagMask = DMA1_IT_TC1;
@@ -62,6 +65,7 @@ uint16_t CSTM32F10xDMA::GetDataIndex()
 void CSTM32F10xDMA::SetBufferSize(uint16_t size)
 {
 	m_DmaStruct.DMA_BufferSize = size;
+	DMA_Init(m_pDmaChannel, &m_DmaStruct);
 }
 
 bool CSTM32F10xDMA::IsTransferFinished()

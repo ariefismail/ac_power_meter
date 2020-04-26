@@ -35,7 +35,9 @@
 #ifndef DMD_H_
 #define DMD_H_
 
+#include <stm32f10x.h>
 #include <Hal.h>
+#include <Timeout.h>
 
 typedef uint8_t (*FontCallback)(const uint8_t*);
 
@@ -47,53 +49,54 @@ public:
 	DMD(uint8_t panelsWide, uint8_t panelsHigh);
 	//virtual ~DMD();
 
-	void Init(ISpi *pSpi,IGpio *pPinA,IGpio *pPinB,IGpio *pPinOE);
+	void Init(SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio *pPinA, IGpio *pPinB,
+			IGpio *pPinOE);
 
 	//Set or clear a pixel at the x and y location (0,0 is the top left corner)
-	void writePixel(uint16_t bX, uint16_t bY, uint8_t bGraphicsMode, uint8_t bPixel);
+	void WritePixel(uint16_t bX, uint16_t bY, uint8_t bGraphicsMode, uint8_t bPixel);
 
 	//Draw a string
-	void drawString(int16_t bX, int16_t bY, const char* bChars, uint8_t length,
+	void DrawString(int16_t bX, int16_t bY, const char* bChars, uint8_t length,
 			uint8_t bGraphicsMode);
 
 	//Select a text font
-	void selectFont(const uint8_t* font);
+	void SelectFont(const uint8_t* font);
 
 	//Draw a single character
-	int drawChar(const int16_t bX, const int16_t bY, const unsigned char letter,
+	int DrawChar(const int16_t bX, const int16_t bY, const unsigned char letter,
 			uint8_t bGraphicsMode);
 
 	//Find the width of a character
-	int charWidth(const unsigned char letter);
+	int16_t CharWidth(const unsigned char letter);
 
 	//Draw a scrolling string
-	void drawMarquee(const char* bChars, uint8_t length, int16_t left, int16_t top);
+	void DrawMarquee(const char* bChars, uint8_t length, int16_t left, int16_t top);
 
 	//Move the maquee accross by amount
-	bool stepMarquee(int16_t amountX, int16_t amountY);
+	bool StepMarquee(int16_t amountX, int16_t amountY);
 
 	//Clear the screen in DMD RAM
-	void clearScreen(uint8_t bNormal);
+	void ClearScreen(uint8_t bNormal);
 
 	//Draw or clear a line from x1,y1 to x2,y2
-	void drawLine(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t bGraphicsMode);
+	void DrawLine(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t bGraphicsMode);
 
 	//Draw or clear a circle of radius r at x,y centre
-	void drawCircle(int16_t xCenter, int16_t yCenter, int16_t radius, uint8_t bGraphicsMode);
+	void DrawCircle(int16_t xCenter, int16_t yCenter, int16_t radius, uint8_t bGraphicsMode);
 
 	//Draw or clear a box(rectangle) with a single pixel border
-	void drawBox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t bGraphicsMode);
+	void DrawBox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t bGraphicsMode);
 
 	//Draw or clear a filled box(rectangle) with a single pixel border
-	void drawFilledBox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t bGraphicsMode);
+	void DrawFilledBox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t bGraphicsMode);
 
 	//Draw the selected test pattern
-	void drawTestPattern(uint8_t bPattern);
+	void DrawTestPattern(uint8_t bPattern);
 
 	//Scan the dot matrix LED panel display, from the RAM mirror out to the display hardware.
 	//Call 4 times to scan the whole display which is made up of 4 interleaved rows within the 16 total rows.
 	//Insert the calls to this function into the main loop for the highest call rate, or from a timer interrupt
-	void scanDisplayBySPI();
+	void Execute();
 
 private:
 	void drawCircleSub(int16_t cx, int16_t cy, int16_t x, int16_t y, uint8_t bGraphicsMode);
@@ -116,7 +119,7 @@ private:
 	uint8_t m_DisplaysWide;
 	uint8_t m_DisplaysHigh;
 	uint8_t m_DisplaysTotal;
-	int16_t m_row1, m_row2, row3;
+	int16_t m_row1, m_row2, m_row3;
 
 	//scanning pointer into bDMDScreenRAM, setup init @ 48 for the first valid scan
 	volatile uint8_t m_bDMDByte;
@@ -167,50 +170,59 @@ private:
 	IGpio *m_PinB;
 	IGpio *m_PinOE;
 	IGpio *m_PinSS;
-	ISpi *m_pSpi;
+	SPI_TypeDef *m_pSpi;
+	IDma *m_pDma;
+	CTimeout m_timer;
+
+	uint8_t m_dmaCache[1000];
+	enum State
+	{
+		SBuffering = 0,
+		STransmitting = 1
+	}m_State;
 
 	//DMD I/O pin macros
-	void LIGHT_DMD_ROW_01_05_09_13()
+	inline void LIGHT_DMD_ROW_01_05_09_13()
 	{
 //		digitalWrite( PIN_DMD_B, LOW);
 //		digitalWrite( PIN_DMD_A, LOW);
 		m_PinB->Clear();
 		m_PinA->Clear();
 	}
-	void LIGHT_DMD_ROW_02_06_10_14()
+	inline void LIGHT_DMD_ROW_02_06_10_14()
 	{
 //		digitalWrite( PIN_DMD_B, LOW);
 //		digitalWrite( PIN_DMD_A, HIGH);
 		m_PinB->Clear();
 		m_PinA->Set();
 	}
-	void LIGHT_DMD_ROW_03_07_11_15()
+	inline void LIGHT_DMD_ROW_03_07_11_15()
 	{
 //		digitalWrite( PIN_DMD_B, HIGH);
 //		digitalWrite( PIN_DMD_A, LOW);
 		m_PinB->Set();
 		m_PinA->Clear();
 	}
-	void LIGHT_DMD_ROW_04_08_12_16()
+	inline void LIGHT_DMD_ROW_04_08_12_16()
 	{
 //		digitalWrite( PIN_DMD_B, HIGH);
 //		digitalWrite( PIN_DMD_A, HIGH);
 		m_PinB->Set();
 		m_PinA->Set();
 	}
-	void LATCH_DMD_SHIFT_REG_TO_OUTPUT()
+	inline void LATCH_DMD_SHIFT_REG_TO_OUTPUT()
 	{
 //		digitalWrite( PIN_DMD_SCLK, HIGH);
 //		digitalWrite( PIN_DMD_SCLK, LOW);
 		m_PinSS->Set();
 		m_PinSS->Clear();
 	}
-	void OE_DMD_ROWS_OFF()
+	inline void OE_DMD_ROWS_OFF()
 	{
 //		digitalWrite( PIN_DMD_nOE, LOW);
 		m_PinOE->Clear();
 	}
-	void OE_DMD_ROWS_ON()
+	inline void OE_DMD_ROWS_ON()
 	{
 //		digitalWrite( PIN_DMD_nOE, HIGH);
 		m_PinOE->Set();
