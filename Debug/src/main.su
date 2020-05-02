@@ -1,4 +1,4 @@
 AnalogInput.h:37:8:CAnalogInput::~CAnalogInput()	0	static
 AnalogInput.h:37:8:virtual CAnalogInput::~CAnalogInput()	8	static
 AnalogInput.h:52:6:void CAnalogInput::SetConfig(float, float)	0	static
-main.cpp:19:5:int main()	2496	static
+main.cpp:20:5:int main()	1536	static

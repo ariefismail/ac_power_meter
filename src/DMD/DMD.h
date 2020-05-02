@@ -146,7 +146,7 @@ private:
 
 	// (32x * 1 / 8) = 4 bytes, * 16y = 64 bytes per screen here.
 	//lookup table for DMD::writePixel to make the pixel indexing routine faster
-	static constexpr uint8_t bPixelLookupTable[8] = { 0x80,   //0, bit 7
+	uint8_t bPixelLookupTable[8] = { 0x80,   //0, bit 7
 			0x40,   //1, bit 6
 			0x20,   //2. bit 5
 			0x10,   //3, bit 4
@@ -174,7 +174,7 @@ private:
 	IDma *m_pDma;
 	CTimeout m_timer;
 
-	uint8_t m_dmaCache[1000];
+	uint8_t m_dmaCache[32];
 	enum State
 	{
 		SBuffering = 0,

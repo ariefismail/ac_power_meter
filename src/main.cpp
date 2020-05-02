@@ -11,7 +11,8 @@
 #include <STM32F10xInputCapture.h>
 #include <STM32F10xDMA.h>
 
-#include <DMD\DMD.h>
+#include <DMD/DMD.h>
+#include <DMD/SystemFont5x7.h>
 #include <ACFrequencyMeter.h>
 #include <AnalogInput.h>
 #include <HeartBeat.h>
@@ -159,21 +160,21 @@ int main(void)
 	// ------------------------- Init p10 ------------------------------
 	// spi init
 	GPIO_StructInit(&sGpio);
-	sGpio.GPIO_Pin = GPIO_Pin_15 | GPIO_Pin_13; // mosi2 sck
+	sGpio.GPIO_Pin = GPIO_Pin_15 | GPIO_Pin_13; // mosi2 sck2
 	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
 	sGpio.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOB, &sGpio);
 
 	// output enable and chip select (SCLK)
 	GPIO_StructInit(&sGpio);
-	sGpio.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2;
+	sGpio.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_12;
 	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
 	sGpio.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOB, &sGpio);
 	CSTM32F10xGpio pOE;
-	pOE.Init(GPIOB, 1);
+	pOE.Init(GPIOB, 14);
 	CSTM32F10xGpio pSS;
-	pSS.Init(GPIOB, 2);
+	pSS.Init(GPIOB, 12);
 
 	// a pa9 , b pa8
 	GPIO_StructInit(&sGpio);
@@ -211,6 +212,7 @@ int main(void)
 	CAnalogInput AnalogInput[2];
 
 	DMD Dmd(2, 1);
+	Dmd.SelectFont(System5x7);
 	Dmd.Init(SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE);
 	for (uint16_t i = 0; i < 2; i++)
 	{
@@ -219,6 +221,9 @@ int main(void)
 	CTimeout timeout;
 	timeout.Init(&MainTimer);
 	timeout.SetExpiry(10000);
+//	Dmd.WritePixel(0,0,1,0);
+//	Dmd.WritePixel(7,0,1,0);
+	Dmd.DrawMarquee("abcdefghij",10,0,4);
 	while (1)
 	{
 		ACFrequencyMeter.Execute();

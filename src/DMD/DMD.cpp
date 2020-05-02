@@ -52,7 +52,7 @@ void DMD::Init(SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio 
 	m_pSpi = pSpi;
 	m_pDma = pDma;
 	m_timer.Init(pTimer);
-	m_timer.SetExpiry(100);
+	m_timer.SetExpiry(10);
 	m_PinSS = pSS;
 	m_PinA = pPinA;
 	m_PinB = pPinB;
@@ -134,7 +134,7 @@ void DMD::DrawString(int16_t bX, int16_t bY, const char* bChars, uint8_t length,
 	int16_t strWidth = 0;
 	this->DrawLine(bX - 1, bY, bX - 1, bY + height, GRAPHICS_INVERSE);
 
-	for (int i = 0; i < length; i++)
+	for (int16_t i = 0; i < length; i++)
 	{
 		int16_t charWide = this->DrawChar(bX + strWidth, bY, bChars[i], bGraphicsMode);
 		if (charWide > 0)
@@ -471,6 +471,8 @@ void DMD::DrawTestPattern(uint8_t bPattern)
  --------------------------------------------------------------------------------------*/
 void DMD::Execute()
 {
+	if (!m_timer.HasElapsed()) return;
+	m_timer.Reset();
 	switch (m_State)
 	{
 		case SBuffering:
@@ -526,8 +528,6 @@ void DMD::Execute()
 		}
 			break;
 	}
-	if (!m_timer.HasElapsed()) return;
-	m_timer.Reset();
 
 }
 
