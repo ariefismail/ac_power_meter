@@ -53,6 +53,7 @@ void DMD::Init(SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio 
 	m_pDma = pDma;
 	m_timer.Init(pTimer);
 	m_timer.SetExpiry(refreshRate);
+	m_refreshRate = refreshRate;
 	m_PinSS = pSS;
 	m_PinA = pPinA;
 	m_PinB = pPinB;

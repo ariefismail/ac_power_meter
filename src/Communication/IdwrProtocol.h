@@ -8,9 +8,12 @@
 #ifndef COMMUNICATION_IDWRPROTOCOL_H_
 #define COMMUNICATION_IDWRPROTOCOL_H_
 
+#include <Hal.h>
+
 class CIdwrProtocol
 {
 public:
+	void Init();
 	CIdwrProtocol();
 	virtual ~CIdwrProtocol();
 

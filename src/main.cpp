@@ -17,6 +17,7 @@
 #include <DMD/Arial14.h>
 #include <ACFrequencyMeter.h>
 #include <AnalogInput.h>
+#include <ACDisplayDmd.h>
 #include <HeartBeat.h>
 
 int main(void)
@@ -218,20 +219,26 @@ int main(void)
 	Dmd.Init(SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE);
 	for (uint16_t i = 0; i < 2; i++)
 	{
-		AnalogInput[i].Initialize(&Adc[i]);
+		AnalogInput[i].Initialize(&Adc[i], &MainTimer);
 	}
-	CTimeout timeout;
-	timeout.Init(&MainTimer);
-	timeout.SetExpiry(500);
-	const char *text = "https://github.com/ariefismail/ac_power_meter.git";
-	Dmd.DrawMarquee(text,strlen(text),0,0);
+//	CTimeout timeout;
+//	timeout.Init(&MainTimer);
+//	timeout.SetExpiry(500);
 
+	CACDisplayDmd AcDisplay;
+	AcDisplay.Init(&ACFrequencyMeter, &AnalogInput[0], &Dmd, &MainTimer);
 	while (1)
 	{
-		ACFrequencyMeter.Execute();
-		Dmd.Execute();
-		HeartBeat.Execute();
 		Uart.Execute();
+
+		ACFrequencyMeter.Execute();
+		for (uint16_t i = 0; i < 2; i++)
+			AnalogInput[i].Execute();
+
+		AcDisplay.Execute();
+		Dmd.Execute();
+
+		HeartBeat.Execute();
 
 //		test code
 //		if (timeout.HasElapsed())
