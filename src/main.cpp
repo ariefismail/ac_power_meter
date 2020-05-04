@@ -13,6 +13,8 @@
 
 #include <DMD/DMD.h>
 #include <DMD/SystemFont5x7.h>
+#include <DMD/Arial_black_16.h>
+#include <DMD/Arial14.h>
 #include <ACFrequencyMeter.h>
 #include <AnalogInput.h>
 #include <HeartBeat.h>
@@ -212,7 +214,7 @@ int main(void)
 	CAnalogInput AnalogInput[2];
 
 	DMD Dmd(2, 1);
-	Dmd.SelectFont(System5x7);
+	Dmd.SelectFont(Arial_14);
 	Dmd.Init(SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE);
 	for (uint16_t i = 0; i < 2; i++)
 	{
@@ -220,24 +222,27 @@ int main(void)
 	}
 	CTimeout timeout;
 	timeout.Init(&MainTimer);
-	timeout.SetExpiry(10000);
-//	Dmd.WritePixel(0,0,1,0);
-//	Dmd.WritePixel(7,0,1,0);
-	Dmd.DrawMarquee("abcdefghij",10,0,4);
+	timeout.SetExpiry(500);
+	const char *text = "https://github.com/ariefismail/ac_power_meter.git";
+	Dmd.DrawMarquee(text,strlen(text),0,0);
+
 	while (1)
 	{
 		ACFrequencyMeter.Execute();
 		Dmd.Execute();
 		HeartBeat.Execute();
 		Uart.Execute();
-		if (timeout.HasElapsed())
-		{
-			timeout.Reset();
-			float f = ACFrequencyMeter.ReadFrequency();
-			char buf[30];
-			sprintf(buf, "%u\r\n", (uint16_t)(f * 10000));
-			Uart.Write(buf);
-		}
+
+//		test code
+//		if (timeout.HasElapsed())
+//		{
+//			Dmd.StepMarquee(-1,0);
+//			timeout.Reset();
+//			float f = ACFrequencyMeter.ReadFrequency();
+//			char buf[30];
+//			sprintf(buf, "%u\r\n", (uint16_t)(f * 10000));
+//			Uart.Write(buf);
+//		}
 	}
 }
 

@@ -47,12 +47,12 @@ DMD::DMD(uint8_t panelsWide, uint8_t panelsHigh)
 	m_State = SBuffering;
 }
 void DMD::Init(SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio *pPinA,
-		IGpio *pPinB, IGpio *pPinOE)
+		IGpio *pPinB, IGpio *pPinOE, uint16_t refreshRate)
 {
 	m_pSpi = pSpi;
 	m_pDma = pDma;
 	m_timer.Init(pTimer);
-	m_timer.SetExpiry(10);
+	m_timer.SetExpiry(refreshRate);
 	m_PinSS = pSS;
 	m_PinA = pPinA;
 	m_PinB = pPinB;
@@ -471,12 +471,13 @@ void DMD::DrawTestPattern(uint8_t bPattern)
  --------------------------------------------------------------------------------------*/
 void DMD::Execute()
 {
-	if (!m_timer.HasElapsed()) return;
-	m_timer.Reset();
+
 	switch (m_State)
 	{
 		case SBuffering:
 		{
+			if (!m_timer.HasElapsed()) return;
+			m_timer.SetExpiry((uint16_t)(m_refreshRate * m_brightness));
 			//SPI transfer pixels to the display hardware shift registers
 			int16_t rowsize = m_DisplaysTotal << 2;
 			int16_t offset = rowsize * m_bDMDByte;
@@ -500,6 +501,8 @@ void DMD::Execute()
 
 		case STransmitting:
 		{
+			if (!m_timer.HasElapsed()) return;
+			m_timer.SetExpiry((uint16_t)(m_refreshRate * (1 - m_brightness)));
 			if (!m_pDma->IsTransferFinished()) return;
 			m_pDma->Stop();
 			m_PinOE->Clear(); // turn off the display first
@@ -529,6 +532,16 @@ void DMD::Execute()
 			break;
 	}
 
+}
+
+void DMD::SetBrighness(float brightness)
+{
+	m_brightness = brightness;
+}
+
+void DMD::SetRefreshRate(uint16_t refreshRate)
+{
+	m_refreshRate = refreshRate;
 }
 
 void DMD::SelectFont(const uint8_t * font)

@@ -50,7 +50,7 @@ public:
 	//virtual ~DMD();
 
 	void Init(SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio *pPinA, IGpio *pPinB,
-			IGpio *pPinOE);
+			IGpio *pPinOE,uint16_t refreshRate = 10);
 
 	//Set or clear a pixel at the x and y location (0,0 is the top left corner)
 	void WritePixel(uint16_t bX, uint16_t bY, uint8_t bGraphicsMode, uint8_t bPixel);
@@ -97,6 +97,9 @@ public:
 	//Call 4 times to scan the whole display which is made up of 4 interleaved rows within the 16 total rows.
 	//Insert the calls to this function into the main loop for the highest call rate, or from a timer interrupt
 	void Execute();
+
+	void SetBrighness(float brightness);
+	void SetRefreshRate(uint16_t refreshRate);
 
 private:
 	void drawCircleSub(int16_t cx, int16_t cy, int16_t x, int16_t y, uint8_t bGraphicsMode);
@@ -172,6 +175,8 @@ private:
 	IGpio *m_PinSS;
 	SPI_TypeDef *m_pSpi;
 	IDma *m_pDma;
+	uint16_t m_refreshRate;
+	float m_brightness;
 	CTimeout m_timer;
 
 	uint8_t m_dmaCache[32];
