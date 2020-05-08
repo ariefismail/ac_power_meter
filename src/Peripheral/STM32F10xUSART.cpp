@@ -52,9 +52,13 @@ char CSTM32F10xUSART::ReadByte()
 	return data;
 }
 
-void CSTM32F10xUSART::Init(USART_TypeDef *pUsart)
+void CSTM32F10xUSART::Init(USART_TypeDef *pUsart, DMA_Channel_TypeDef *pDma, char *pRxDataBuffer,
+		uint16_t sizeOfBuffer)
 {
 	m_pUsart = pUsart;
+	m_pDma = pDma;
+	m_pRxDataBuffer = pRxDataBuffer;
+	m_sizeOfBuffer = sizeOfBuffer;
 }
 
 void CSTM32F10xUSART::Execute()
@@ -65,8 +69,11 @@ void CSTM32F10xUSART::Execute()
 
 void CSTM32F10xUSART::executeRx()
 {
-	if (!USART_GetFlagStatus(m_pUsart, USART_FLAG_RXNE)) return;
-	char data = USART_ReceiveData(m_pUsart);
+	if (m_bufferIndex == (m_sizeOfBuffer - m_pDma->CNDTR)) return;
+//	if (!USART_GetFlagStatus(m_pUsart, USART_FLAG_RXNE)) return;
+
+	char data = m_pRxDataBuffer[m_bufferIndex];
+	m_bufferIndex = (m_bufferIndex + 1) % m_sizeOfBuffer;
 	m_RxBuffer.Push(data);
 }
 
@@ -82,6 +89,7 @@ void CSTM32F10xUSART::executeTx()
 CSTM32F10xUSART::CSTM32F10xUSART()
 {
 	// TODO Auto-generated constructor stub
+	m_bufferIndex = 0;
 
 }
 

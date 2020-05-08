@@ -76,6 +76,22 @@ int main(void)
 	sGpio.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_Init(GPIOB, &sGpio);
 
+	// uart dma init
+	DMA_InitTypeDef dma;
+	char rxData[322];
+	DMA_StructInit(&dma);
+	dma.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+	dma.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+	dma.DMA_DIR = DMA_DIR_PeripheralSRC;
+	dma.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	dma.DMA_Mode = DMA_Mode_Circular;
+	dma.DMA_BufferSize = sizeof(rxData);
+	dma.DMA_Priority = DMA_Priority_Medium;
+	dma.DMA_MemoryBaseAddr = (uint32_t)rxData;
+	dma.DMA_PeripheralBaseAddr = (uint32_t)&USART3->DR;
+	DMA_Init(DMA1_Channel3, &dma);
+	DMA_Cmd(DMA1_Channel3, ENABLE);
+
 	USART_InitTypeDef usart;
 	usart.USART_BaudRate = 38400;
 	usart.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
@@ -84,9 +100,10 @@ int main(void)
 	usart.USART_StopBits = USART_StopBits_1;
 	usart.USART_WordLength = USART_WordLength_8b;
 	USART_Init(USART3, &usart);
+	USART_DMACmd(USART3, USART_DMAReq_Rx, ENABLE);
 	USART_Cmd(USART3, ENABLE);
 	CSTM32F10xUSART Uart;
-	Uart.Init(USART3);
+	Uart.Init(USART3, DMA1_Channel3, rxData, sizeof(rxData));
 	// -----------------------------------------------------------------
 
 	// ------------------------- Init ADC ------------------------------
@@ -103,7 +120,6 @@ int main(void)
 	GPIO_Init(GPIOA, &sGpio);
 
 	// adc dma init
-	DMA_InitTypeDef dma;
 	DMA_StructInit(&dma);
 	dma.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
 	dma.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
@@ -214,42 +230,42 @@ int main(void)
 	Dev.AcDisplay.Init(&ACFrequencyMeter, &Dev.AnalogInput[0], &Dmd, &MainTimer);
 
 	// initialize our communcation opcode!
-	Dev.SerialPort.Init(&Uart,&MainTimer);
+	Dev.SerialPort.Init(&Uart, &MainTimer);
 
 	auto getAppName = [](char *rx,char *tx)
 	{
 		const char DELIMITER[2] = ",";
 		char *token;
 		// get opcode data
-		token = strtok(rx,DELIMITER);
+			token = strtok(rx,DELIMITER);
 
-		strcpy(tx,token);
-		strcat(tx,",AC POWER METER INDO-WARE\n");
-	};
+			strcpy(tx,token);
+			strcat(tx,",AC POWER METER INDO-WARE\n");
+		};
 
 	auto setAnalogInputParams = [](char *rx,char *tx)
 	{
 		const char DELIMITER[2] = ",";
 		char *token;
 		// dump opcode data
-		token = strtok(rx,DELIMITER);
+			token = strtok(rx,DELIMITER);
 
-		// fetch string data
-		token = strtok(NULL, DELIMITER);
-		uint16_t id = std::atoi(token);
-		token = strtok(NULL, DELIMITER);
-		float scale = std::atof(token);
-		token = strtok(NULL, DELIMITER);
-		float offset = std::atof(token);
+			// fetch string data
+			token = strtok(NULL, DELIMITER);
+			uint16_t id = std::atoi(token);
+			token = strtok(NULL, DELIMITER);
+			float scale = std::atof(token);
+			token = strtok(NULL, DELIMITER);
+			float offset = std::atof(token);
 
-		Dev.AnalogInput[id].SetConfig(scale,offset);
+			Dev.AnalogInput[id].SetConfig(scale,offset);
 
-		// no returned data
-		*tx=0;
-	};
+			// no returned data
+			*tx=0;
+		};
 
-	Dev.SerialPort.AddFunction(0,getAppName);
-	Dev.SerialPort.AddFunction(1,setAnalogInputParams);
+	Dev.SerialPort.AddFunction(0, getAppName);
+	Dev.SerialPort.AddFunction(1, setAnalogInputParams);
 	while (1)
 	{
 		Uart.Execute();

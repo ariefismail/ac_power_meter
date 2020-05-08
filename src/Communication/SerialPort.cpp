@@ -38,7 +38,6 @@ void CSerialPort::Execute()
 		memset(returnString, 0, sizeof(returnString));
 		token = strtok(m_buffer, DELIMITER);
 		uint16_t opcode = std::atoi(token);
-		m_index = opcode;
 
 		if (!m_pFunc[opcode])
 		{
@@ -58,7 +57,7 @@ void CSerialPort::Execute()
 	else
 	{
 		m_index++;
-		if (m_index > sizeof(m_buffer)) m_index = 0;
+		if (m_index > MAX_BUFFER) m_index = 0;
 	}
 }
 

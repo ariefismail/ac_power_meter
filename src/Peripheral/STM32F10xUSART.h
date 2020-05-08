@@ -24,7 +24,7 @@ public:
 	bool Read(unsigned char* pData, uint16_t* pLength);
 	char ReadByte();
 
-	void Init(USART_TypeDef *pUsart);
+	void Init(USART_TypeDef *pUsart,DMA_Channel_TypeDef *pDma,char *pRxDataBuffer,uint16_t sizeOfBuffer);
 	void Execute();
 	CSTM32F10xUSART();
 	virtual ~CSTM32F10xUSART();
@@ -34,6 +34,10 @@ private:
 	void executeTx();
 
 private:
+	char *m_pRxDataBuffer;
+	uint16_t m_sizeOfBuffer;
+	uint16_t m_bufferIndex;
+	DMA_Channel_TypeDef *m_pDma;
 	USART_TypeDef *m_pUsart;
 	CCircularFifo<char,TX_BUFFER_SIZE>m_TxBuffer;
 	CCircularFifo<char,RX_BUFFER_SIZE>m_RxBuffer;

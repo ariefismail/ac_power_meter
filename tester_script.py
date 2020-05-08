@@ -29,19 +29,19 @@ def get_serial_port():
             serial_port+=i
     return serial_port
 
-def read_thread():
-    while (is_running):
-        rx_data = ser.read_until()
+# def read_thread():
+#     while (is_running):
+#         rx_data = ser.read_until()
 
 
 if __name__ == '__main__':
     # serial_port = get_serial_port()
     ser=serial.Serial(get_serial_port(),38400) # same as bluetooth baudrate
     is_running = True
-    rx_thread = threading.Thread(target=read_thread)
-    rx_thread.start()
+    # rx_thread = threading.Thread(target=read_thread)
+    # rx_thread.start()
 
 def get_app_name():
-    ser.write('0\n')
+    ser.write('0,\n')
 
 
