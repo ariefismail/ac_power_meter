@@ -45,12 +45,15 @@ void CSerialPort::Execute()
 			return;
 		}
 
-		m_pFunc[opcode](m_buffer, returnString);
+		m_pFunc[opcode](&m_buffer[strlen(m_buffer)+1], returnString);
 
 		// if there is any returned data then send it
 		if(strlen(returnString)>0)
 		{
-			m_pUart->Write(returnString);
+			char buf[324];
+			sprintf(buf,"%d,",opcode);
+			strcat(buf,returnString);
+			m_pUart->Write(buf);
 		}
 		m_index = 0;
 	}

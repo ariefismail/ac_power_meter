@@ -1,5 +1,5 @@
-main.cpp:235:40:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	32	static
-main.cpp:246:50:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	32	static
+main.cpp:235:40:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	24	static
+main.cpp:240:50:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	32	static
 CircularBuffer.h:123:6:void CCircularBuffer<ELEMTYPE, BUFFSIZE>::Clear() [with ELEMTYPE = short unsigned int; short unsigned int BUFFSIZE = 20u]	0	static
 MovAvgBuffer.h:81:6:void CMovAvgBuffer<ELEMTYPE, SUMTYPE, BUFFSIZE>::Clear() [with ELEMTYPE = short unsigned int; SUMTYPE = short unsigned int; short unsigned int BUFFSIZE = 20u]	8	static
 CircularBuffer.h:81:10:ELEMTYPE CCircularBuffer<ELEMTYPE, BUFFSIZE>::Get(uint16_t) const [with ELEMTYPE = short unsigned int; short unsigned int BUFFSIZE = 20u]	4	static

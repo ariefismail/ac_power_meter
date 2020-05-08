@@ -234,29 +234,20 @@ int main(void)
 
 	auto getAppName = [](char *rx,char *tx)
 	{
-		const char DELIMITER[2] = ",";
-		char *token;
-		// get opcode data
-			token = strtok(rx,DELIMITER);
-
-			strcpy(tx,token);
-			strcat(tx,",AC POWER METER INDO-WARE\n");
-		};
+		strcat(tx,"AC POWER METER INDO-WARE\n");
+	};
 
 	auto setAnalogInputParams = [](char *rx,char *tx)
 	{
 		const char DELIMITER[2] = ",";
 		char *token;
-		// dump opcode data
-			token = strtok(rx,DELIMITER);
-
-			// fetch string data
+		// fetch string data
+			token = strtok(rx, DELIMITER);
+			uint16_t id = atoi(token);
 			token = strtok(NULL, DELIMITER);
-			uint16_t id = std::atoi(token);
+			float scale = atof(token);
 			token = strtok(NULL, DELIMITER);
-			float scale = std::atof(token);
-			token = strtok(NULL, DELIMITER);
-			float offset = std::atof(token);
+			float offset = atof(token);
 
 			Dev.AnalogInput[id].SetConfig(scale,offset);
 
