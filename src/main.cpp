@@ -214,7 +214,7 @@ int main(void)
 	Dev.AcDisplay.Init(&ACFrequencyMeter, &Dev.AnalogInput[0], &Dmd, &MainTimer);
 
 	// initialize our communcation opcode!
-	Dev.SerialPort.Init(&Uart);
+	Dev.SerialPort.Init(&Uart,&MainTimer);
 
 	auto getAppName = [](char *rx,char *tx)
 	{

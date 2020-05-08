@@ -7,9 +7,11 @@
 
 #include <Communication/SerialPort.h>
 
-void CSerialPort::Init(IUsart *pUart)
+void CSerialPort::Init(IUsart *pUart,ITimer *pTimer)
 {
 	m_pUart = pUart;
+	m_Timeout.Init(pTimer);
+	m_Timeout.SetExpiry(5000);
 }
 
 void CSerialPort::AddFunction(uint8_t opcode, void (*pFunc)(char*, char*))
@@ -20,8 +22,13 @@ void CSerialPort::AddFunction(uint8_t opcode, void (*pFunc)(char*, char*))
 
 void CSerialPort::Execute()
 {
+	// reset the index if the '\n' is taking too long
+	if(m_Timeout.HasElapsed() && m_index>0)
+		m_index = 0;
+
 	if (!m_pUart->HasData()) return;
 	m_buffer[m_index] = m_pUart->ReadByte();
+	m_Timeout.Reset();
 
 	// if newline detected
 	if (m_buffer[m_index] == '\n')

@@ -9,6 +9,7 @@
 #define COMMUNICATION_SERIALPORT_H_
 
 #include <Hal.h>
+#include <Timeout.h>
 #include <cstdint>
 #include <string>
 #include <array>
@@ -18,7 +19,7 @@ class CSerialPort
 public:
 	CSerialPort();
 	virtual ~CSerialPort();
-	void Init(IUsart *pUart);
+	void Init(IUsart *pUart,ITimer *pTimer);
 	void AddFunction(uint8_t opcode, void (*pFunc)(char*, char*));
 	void Execute();
 
@@ -29,10 +30,12 @@ private:
 	char m_buffer[MAX_BUFFER];
 	uint16_t m_index;
 	static const uint8_t MAX_OPCODE = 10;
-	IUsart *m_pUart;
 
 	// our argument is input string and output string
 	void (*m_pFunc[MAX_OPCODE])(char*, char*);
+
+	IUsart *m_pUart;
+	CTimeout m_Timeout;
 };
 
 #endif /* COMMUNICATION_SERIALPORT_H_ */
