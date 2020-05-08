@@ -31,6 +31,6 @@ public:
 
 };
 
-SDevice Dev;
+extern SDevice Dev;
 
 #endif /* DEVICE_H_ */

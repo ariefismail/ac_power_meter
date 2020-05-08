@@ -54,8 +54,7 @@ int main(void)
 	MainTimer.Init(TIM2);
 	CSTM32F10xGpio GpioHeartBeat;
 	GpioHeartBeat.Init(GPIOC, 13);
-	CHeartBeat HeartBeat;
-	HeartBeat.Init(&GpioHeartBeat, &MainTimer, 5000);
+	Dev.HeartBeat.Init(&GpioHeartBeat, &MainTimer, 5000);
 
 	// --------------------------------------------------------------------
 
@@ -78,7 +77,7 @@ int main(void)
 	GPIO_Init(GPIOB, &sGpio);
 
 	USART_InitTypeDef usart;
-	usart.USART_BaudRate = 9600;
+	usart.USART_BaudRate = 38400;
 	usart.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	usart.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 	usart.USART_Parity = USART_Parity_No;
@@ -219,7 +218,13 @@ int main(void)
 
 	auto getAppName = [](char *rx,char *tx)
 	{
-		strcpy(tx,"AC POWER METER INDO-WARE");
+		const char DELIMITER[2] = ",";
+		char *token;
+		// get opcode data
+		token = strtok(rx,DELIMITER);
+
+		strcpy(tx,token);
+		strcat(tx,",AC POWER METER INDO-WARE\n");
 	};
 
 	auto setAnalogInputParams = [](char *rx,char *tx)

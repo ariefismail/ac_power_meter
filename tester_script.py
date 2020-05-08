@@ -9,6 +9,8 @@ import signal
 import sys
 import threading
 
+is_running = False
+
 def get_serial_port():
     import serial.tools.list_ports   # import serial module
     comPorts = list(serial.tools.list_ports.comports())    # get list of all devices connected through serial port
@@ -27,6 +29,19 @@ def get_serial_port():
             serial_port+=i
     return serial_port
 
+def read_thread():
+    while (is_running):
+        rx_data = ser.read_until()
+
+
 if __name__ == '__main__':
-    serial_port = get_serial_port()
-    ser=serial.Serial(serial_port,9600)
+    # serial_port = get_serial_port()
+    ser=serial.Serial(get_serial_port(),38400) # same as bluetooth baudrate
+    is_running = True
+    rx_thread = threading.Thread(target=read_thread)
+    rx_thread.start()
+
+def get_app_name():
+    ser.write('0\n')
+
+

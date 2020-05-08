@@ -7,6 +7,6 @@
 
 #include <Device.h>
 
-extern SDevice Dev;
+SDevice Dev;
 
 
