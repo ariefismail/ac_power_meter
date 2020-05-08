@@ -46,6 +46,7 @@ DMD::DMD(uint8_t panelsWide, uint8_t panelsHigh)
 	m_bDMDByte = 0;
 	m_State = SBuffering;
 }
+
 void DMD::Init(SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio *pPinA,
 		IGpio *pPinB, IGpio *pPinOE, uint16_t refreshRate)
 {

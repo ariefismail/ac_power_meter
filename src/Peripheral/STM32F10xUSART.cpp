@@ -46,6 +46,7 @@ bool CSTM32F10xUSART::Read(unsigned char* pData, uint16_t* pLength)
 
 char CSTM32F10xUSART::ReadByte()
 {
+	if (!HasData()) return 0;
 	char data;
 	m_RxBuffer.Pop(data);
 	return data;

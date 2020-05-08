@@ -1,6 +1,5 @@
 #include <stddef.h>
 #include <stdio.h>
-#include <functional>
 #include "stm32f10x.h"
 
 #include <Hal.h>
@@ -11,14 +10,7 @@
 #include <STM32F10xInputCapture.h>
 #include <STM32F10xDMA.h>
 
-#include <DMD/DMD.h>
-#include <DMD/SystemFont5x7.h>
-#include <DMD/Arial_black_16.h>
-#include <DMD/Arial14.h>
-#include <ACFrequencyMeter.h>
-#include <AnalogInput.h>
-#include <ACDisplayDmd.h>
-#include <HeartBeat.h>
+#include <Device.h>
 
 int main(void)
 {
@@ -211,45 +203,61 @@ int main(void)
 	// frequency meter
 	CACFrequencyMeter ACFrequencyMeter;
 	ACFrequencyMeter.Init(&InputCapture);
-	// voltage and current measurement
-	CAnalogInput AnalogInput[2];
 
 	DMD Dmd(2, 1);
 	Dmd.SelectFont(Arial_14);
 	Dmd.Init(SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE);
 	for (uint16_t i = 0; i < 2; i++)
 	{
-		AnalogInput[i].Initialize(&Adc[i], &MainTimer);
+		Dev.AnalogInput[i].Initialize(&Adc[i], &MainTimer);
 	}
-//	CTimeout timeout;
-//	timeout.Init(&MainTimer);
-//	timeout.SetExpiry(500);
 
-	CACDisplayDmd AcDisplay;
-	AcDisplay.Init(&ACFrequencyMeter, &AnalogInput[0], &Dmd, &MainTimer);
+	Dev.AcDisplay.Init(&ACFrequencyMeter, &Dev.AnalogInput[0], &Dmd, &MainTimer);
+
+	// initialize our communcation opcode!
+	Dev.SerialPort.Init(&Uart);
+
+	auto getAppName = [](char *rx,char *tx)
+	{
+		strcpy(tx,"AC POWER METER INDO-WARE");
+	};
+
+	auto setAnalogInputParams = [](char *rx,char *tx)
+	{
+		const char DELIMITER[2] = ",";
+		char *token;
+		// dump opcode data
+		token = strtok(rx,DELIMITER);
+
+		// fetch string data
+		token = strtok(NULL, DELIMITER);
+		uint16_t id = std::atoi(token);
+		token = strtok(NULL, DELIMITER);
+		float scale = std::atof(token);
+		token = strtok(NULL, DELIMITER);
+		float offset = std::atof(token);
+
+		Dev.AnalogInput[id].SetConfig(scale,offset);
+
+		// no returned data
+		*tx=0;
+	};
+
+	Dev.SerialPort.AddFunction(0,getAppName);
+	Dev.SerialPort.AddFunction(1,setAnalogInputParams);
 	while (1)
 	{
 		Uart.Execute();
+		Dev.SerialPort.Execute();
 
 		ACFrequencyMeter.Execute();
 		for (uint16_t i = 0; i < 2; i++)
-			AnalogInput[i].Execute();
+			Dev.AnalogInput[i].Execute();
 
-		AcDisplay.Execute();
+		Dev.AcDisplay.Execute();
 		Dmd.Execute();
 
-		HeartBeat.Execute();
-
-//		test code
-//		if (timeout.HasElapsed())
-//		{
-//			Dmd.StepMarquee(-1,0);
-//			timeout.Reset();
-//			float f = ACFrequencyMeter.ReadFrequency();
-//			char buf[30];
-//			sprintf(buf, "%u\r\n", (uint16_t)(f * 10000));
-//			Uart.Write(buf);
-//		}
+		Dev.HeartBeat.Execute();
 	}
 }
 
