@@ -26,7 +26,9 @@ public:
 
 	CHeartBeat HeartBeat;
 	CAnalogInput AnalogInput[2];
+	DMD Dmd;
 	CACDisplayDmd AcDisplay;
+	CACFrequencyMeter ACFrequencyMeter;
 	CSerialPort SerialPort;
 
 };

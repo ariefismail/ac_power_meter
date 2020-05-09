@@ -30,7 +30,25 @@
  Note this currently uses the SPI port for the fastest performance to the DMD, be
  careful of possible conflicts with other SPI port devices
  --------------------------------------------------------------------------------------*/
-DMD::DMD(uint8_t panelsWide, uint8_t panelsHigh)
+DMD::DMD()
+{
+//	m_DisplaysWide = panelsWide;
+//	m_DisplaysHigh = panelsHigh;
+//	m_DisplaysTotal = m_DisplaysWide * m_DisplaysHigh;
+//	m_row1 = m_DisplaysTotal << 4;
+//	m_row2 = m_DisplaysTotal << 5;
+//	m_row3 = ((m_DisplaysTotal << 2) * 3) << 2;
+//	m_bDMDScreenRAM = (uint8_t *)malloc(m_DisplaysTotal * DMD_RAM_SIZE_BYTES);
+//
+//	ClearScreen(true);
+//
+//	// init the scan line/ram pointer to the required start point
+//	m_bDMDByte = 0;
+//	m_State = SBuffering;
+}
+
+void DMD::Init(uint8_t panelsWide, uint8_t panelsHigh, SPI_TypeDef *pSpi, IDma *pDma,
+		ITimer *pTimer, IGpio *pSS, IGpio *pPinA, IGpio *pPinB, IGpio *pPinOE, uint16_t refreshRate)
 {
 	m_DisplaysWide = panelsWide;
 	m_DisplaysHigh = panelsHigh;
@@ -45,11 +63,7 @@ DMD::DMD(uint8_t panelsWide, uint8_t panelsHigh)
 	// init the scan line/ram pointer to the required start point
 	m_bDMDByte = 0;
 	m_State = SBuffering;
-}
 
-void DMD::Init(SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio *pPinA,
-		IGpio *pPinB, IGpio *pPinOE, uint16_t refreshRate)
-{
 	m_pSpi = pSpi;
 	m_pDma = pDma;
 	m_timer.Init(pTimer);
@@ -479,7 +493,7 @@ void DMD::Execute()
 		case SBuffering:
 		{
 			if (!m_timer.HasElapsed()) return;
-			m_timer.SetExpiry((uint16_t)(m_refreshRate * m_brightness));
+			m_timer.SetExpiry((uint16_t)(m_refreshRate * (1 - m_brightness)));
 			//SPI transfer pixels to the display hardware shift registers
 			int16_t rowsize = m_DisplaysTotal << 2;
 			int16_t offset = rowsize * m_bDMDByte;
@@ -497,6 +511,7 @@ void DMD::Execute()
 			m_pDma->SetBufferSize(size);
 			m_PinSS->Clear(); // chip select low
 			m_pDma->Start();
+			m_PinOE->Clear(); // turn off the display first
 			m_State = STransmitting;
 		}
 			break;
@@ -504,10 +519,10 @@ void DMD::Execute()
 		case STransmitting:
 		{
 			if (!m_timer.HasElapsed()) return;
-			m_timer.SetExpiry((uint16_t)(m_refreshRate * (1 - m_brightness)));
+			m_timer.SetExpiry((uint16_t)(m_refreshRate * m_brightness));
 			if (!m_pDma->IsTransferFinished()) return;
 			m_pDma->Stop();
-			m_PinOE->Clear(); // turn off the display first
+
 			m_PinSS->Set(); // latch the transfered data
 			switch (m_bDMDByte)
 			{
@@ -538,6 +553,7 @@ void DMD::Execute()
 
 void DMD::SetBrighness(float brightness)
 {
+	if (brightness > 1 || brightness < 0) return;
 	m_brightness = brightness;
 }
 

@@ -46,10 +46,10 @@ class DMD
 {
 public:
 	//Instantiate the DMD
-	DMD(uint8_t panelsWide, uint8_t panelsHigh);
+	DMD();
 	//virtual ~DMD();
 
-	void Init(SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio *pPinA, IGpio *pPinB,
+	void Init(uint8_t panelsWide, uint8_t panelsHigh,SPI_TypeDef *pSpi, IDma *pDma, ITimer *pTimer, IGpio *pSS, IGpio *pPinA, IGpio *pPinB,
 			IGpio *pPinOE,uint16_t refreshRate = 10);
 
 	//Set or clear a pixel at the x and y location (0,0 is the top left corner)

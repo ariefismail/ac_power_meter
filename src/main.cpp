@@ -216,18 +216,17 @@ int main(void)
 
 	// init our basic need !
 	// frequency meter
-	CACFrequencyMeter ACFrequencyMeter;
-	ACFrequencyMeter.Init(&InputCapture);
+	Dev.ACFrequencyMeter.Init(&InputCapture);
 
-	DMD Dmd(2, 1);
-	Dmd.SelectFont(Arial_14);
-	Dmd.Init(SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE);
+	Dev.Dmd.SelectFont(Arial_14);
+	Dev.Dmd.Init(2, 1, SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE, 20);
+	Dev.Dmd.SetBrighness(0.8);
 	for (uint16_t i = 0; i < 2; i++)
 	{
 		Dev.AnalogInput[i].Initialize(&Adc[i], &MainTimer);
 	}
 
-	Dev.AcDisplay.Init(&ACFrequencyMeter, &Dev.AnalogInput[0], &Dmd, &MainTimer);
+	Dev.AcDisplay.Init(&Dev.ACFrequencyMeter, &Dev.AnalogInput[0], &Dev.Dmd, &MainTimer);
 
 	// initialize our communcation opcode!
 	Dev.SerialPort.Init(&Uart, &MainTimer);
@@ -255,19 +254,69 @@ int main(void)
 			*tx=0;
 		};
 
+	auto getAnalogInputParams = [](char *rx,char *tx)
+	{
+		const char DELIMITER[2] = ",";
+		char *token;
+		// fetch string data
+			token = strtok(rx, DELIMITER);
+			uint16_t id = atoi(token);
+			float scale = 0;
+			float offset = 0;
+			Dev.AnalogInput[id].GetConfig(&scale,&offset);
+			char buf[50];
+			sprintf(buf,"%d,%d\n",(uint16_t)(scale*100),(uint16_t)(offset*100));
+			strcat(tx,buf);
+		};
+
+	auto readAnalogInput = [](char *rx,char *tx)
+	{
+		const char DELIMITER[2] = ",";
+		char *token;
+		// fetch string data
+			token = strtok(rx, DELIMITER);
+			uint16_t id = atoi(token);
+			char buf[50];
+			sprintf(buf,"%d,%d\n",(uint16_t)(Dev.AnalogInput[id].Read()*100),Dev.AnalogInput[id].ReadAdc());
+			strcat(tx,buf);
+		};
+
+	auto readFrequency = [](char *rx,char *tx)
+	{
+		// fetch string data
+			char buf[50];
+			sprintf(buf,"%d\n",(uint16_t)(Dev.ACFrequencyMeter.ReadFrequency()*100));
+			strcat(tx,buf);
+		};
+
+	auto setBrighness = [](char *rx,char *tx)
+	{
+		const char DELIMITER[2] = ",";
+		char *token;
+		token = strtok(NULL, DELIMITER);
+		float value = atof(token);
+		Dev.Dmd.SetBrighness(value);
+		*tx=0;
+	};
+
 	Dev.SerialPort.AddFunction(0, getAppName);
 	Dev.SerialPort.AddFunction(1, setAnalogInputParams);
+	Dev.SerialPort.AddFunction(2, getAnalogInputParams);
+	Dev.SerialPort.AddFunction(3, readAnalogInput);
+	Dev.SerialPort.AddFunction(4, readFrequency);
+	Dev.SerialPort.AddFunction(5, setBrighness);
+
 	while (1)
 	{
 		Uart.Execute();
 		Dev.SerialPort.Execute();
 
-		ACFrequencyMeter.Execute();
+		Dev.ACFrequencyMeter.Execute();
 		for (uint16_t i = 0; i < 2; i++)
 			Dev.AnalogInput[i].Execute();
 
 		Dev.AcDisplay.Execute();
-		Dmd.Execute();
+		Dev.Dmd.Execute();
 
 		Dev.HeartBeat.Execute();
 	}

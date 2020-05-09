@@ -55,5 +55,17 @@ def get_app_name():
 def set_aux_in_params(id,scale,offset):
     send_data = '{0},{1},{2},{3},\n'.format(1,id,scale,offset)
     ser.write(send_data)
+
+def get_aux_in_params(id):
+    send_data = '{0},{1},\n'.format(2,id)
+    ser.write(send_data)
+
+def read_aux_in(id):
+    send_data = '{0},{1},\n'.format(3,id)
+    ser.write(send_data)
+
+def read_frequency():
+    send_data = '{0},\n'.format(4)
+    ser.write(send_data)
     
 

@@ -20,6 +20,7 @@ public:
 
 	void Initialize(IAdc* pAdc, ITimer *pTimer = NULL);
 	void SetConfig(float scale, float offset);
+	void GetConfig(float *scale, float *offset);
 	void SetSamplingPeriod(uint16_t period);
 	float Read();
 	float ReadFiltered();
@@ -66,6 +67,12 @@ inline void CAnalogInput::SetConfig(float scale, float offset)
 {
 	m_Scale = scale;
 	m_Offset = offset;
+}
+
+inline void CAnalogInput::GetConfig(float *scale, float *offset)
+{
+	*scale = m_Scale;
+	*offset = m_Offset;
 }
 
 inline void CAnalogInput::SetSamplingPeriod(uint16_t period)

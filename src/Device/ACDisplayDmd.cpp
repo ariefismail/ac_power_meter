@@ -14,6 +14,7 @@ void CACDisplayDmd::Init(CACFrequencyMeter *pAcFreqMeter, CAnalogInput *pAcVolta
 	m_pAcVoltage = pAcVoltage;
 	m_pDmd = pDmd;
 	m_timeout.Init(pTimer);
+	m_timeout.SetExpiry(5000);
 }
 
 void CACDisplayDmd::Execute()
@@ -32,12 +33,12 @@ void CACDisplayDmd::Execute()
 	uint16_t acVoltageLow = acVoltage % 100;
 	char acVoltageDisplay[20];
 	memset(acVoltageDisplay,0,sizeof(acVoltageDisplay));
-	sprintf(acVoltageDisplay,"%d.%dHz",acVoltageHigh,acVoltageLow);
+	sprintf(acVoltageDisplay,"%d.%dV",acVoltageHigh,acVoltageLow);
 
 
-	m_pDmd->ClearScreen(1);
-	m_pDmd->DrawString(0,0,freqDisplay,strlen(freqDisplay),1);
-	m_pDmd->DrawString(0,15,acVoltageDisplay,strlen(acVoltageDisplay),1);
+//	m_pDmd->ClearScreen(0);
+	m_pDmd->DrawString(0,0,freqDisplay,strlen(freqDisplay),0);
+	m_pDmd->DrawString(32,0,acVoltageDisplay,strlen(acVoltageDisplay),0);
 }
 
 CACDisplayDmd::CACDisplayDmd()
