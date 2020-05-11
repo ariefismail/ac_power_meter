@@ -16,6 +16,7 @@ public:
 	void Init(IInputCapture *pIc);
 	void Execute();
 	float ReadFrequency();
+	uint16_t ReadRaw();
 
 	CACFrequencyMeter();
 	virtual ~CACFrequencyMeter();
@@ -24,6 +25,7 @@ private:
 	IInputCapture *m_pIc;
 	uint16_t m_PrevTimeStamp;
 	uint16_t m_CurrentTimeStamp;
+	uint16_t m_Delta;
 	float m_Freq;
 };
 

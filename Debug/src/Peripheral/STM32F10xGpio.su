@@ -3,5 +3,5 @@ STM32F10xGpio.cpp:15:6:virtual void CSTM32F10xGpio::Clear()	0	static
 STM32F10xGpio.cpp:20:6:virtual bool CSTM32F10xGpio::Get() const	0	static
 STM32F10xGpio.cpp:41:1:CSTM32F10xGpio::~CSTM32F10xGpio()	0	static
 STM32F10xGpio.cpp:41:1:virtual CSTM32F10xGpio::~CSTM32F10xGpio()	8	static
-STM32F10xGpio.cpp:25:6:void CSTM32F10xGpio::Init(GPIO_TypeDef*, uint8_t)	0	static
+STM32F10xGpio.cpp:25:6:void CSTM32F10xGpio::Init(GPIO_TypeDef*, uint8_t)	4	static
 STM32F10xGpio.cpp:33:1:CSTM32F10xGpio::CSTM32F10xGpio()	0	static

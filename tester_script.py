@@ -68,4 +68,6 @@ def read_frequency():
     send_data = '{0},\n'.format(4)
     ser.write(send_data)
     
-
+def set_brightness(value):
+    send_data = '{0},{1},\n'.format(5,value)
+    ser.write(send_data)

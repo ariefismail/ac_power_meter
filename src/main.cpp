@@ -153,16 +153,16 @@ int main(void)
 	// ------------------------- Init input capture ------------------------------
 	GPIO_StructInit(&sGpio);
 	sGpio.GPIO_Pin = GPIO_Pin_6; // tim3 channel 1
-	sGpio.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
+	sGpio.GPIO_Mode = GPIO_Mode_IPU;
+	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA, &sGpio);
 
 	TIM_ICInitTypeDef sInputCapture;
 	TIM_ICStructInit(&sInputCapture);
 	sInputCapture.TIM_Channel = TIM_Channel_1;
 	sInputCapture.TIM_ICSelection = TIM_ICSelection_DirectTI;
-	sInputCapture.TIM_ICPolarity = TIM_ICPolarity_Falling;
-	sInputCapture.TIM_ICFilter = 0x9;
+	sInputCapture.TIM_ICPolarity = TIM_ICPolarity_Rising;
+	sInputCapture.TIM_ICFilter = 0xF;
 	TIM_ICInit(TIM3, &sInputCapture);
 	CSTM32F10xInputCapture InputCapture;
 	InputCapture.Init(TIM3, TIM_Channel_1);
@@ -306,6 +306,9 @@ int main(void)
 	Dev.SerialPort.AddFunction(4, readFrequency);
 	Dev.SerialPort.AddFunction(5, setBrighness);
 
+	CTimeout Timeout;
+	Timeout.Init(&MainTimer);
+	Timeout.SetExpiry(10000);
 	while (1)
 	{
 		Uart.Execute();
@@ -319,6 +322,14 @@ int main(void)
 		Dev.Dmd.Execute();
 
 		Dev.HeartBeat.Execute();
+
+		if(Timeout.HasElapsed())
+		{
+			Timeout.Reset();
+			char buf[50];
+			sprintf(buf,"%d\r\n",Dev.AnalogInput[0].ReadAdcFiltered());
+			Uart.Write(buf);
+		}
 	}
 }
 

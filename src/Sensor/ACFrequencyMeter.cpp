@@ -16,13 +16,19 @@ void CACFrequencyMeter::Execute()
 {
 	if (!m_pIc->IsTriggered()) return;
 	m_CurrentTimeStamp = m_pIc->Read();
-	m_Freq = 1000.0f / (uint16_t)(m_CurrentTimeStamp - m_PrevTimeStamp);
+	m_Delta = (uint16_t)(m_CurrentTimeStamp - m_PrevTimeStamp);
+	m_Freq = 10.0f / m_Delta;
 	m_PrevTimeStamp = m_CurrentTimeStamp;
 }
 
 float CACFrequencyMeter::ReadFrequency()
 {
 	return m_Freq;
+}
+
+uint16_t CACFrequencyMeter::ReadRaw()
+{
+	return m_Delta;
 }
 
 CACFrequencyMeter::CACFrequencyMeter()

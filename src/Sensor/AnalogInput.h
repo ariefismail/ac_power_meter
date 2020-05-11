@@ -24,6 +24,7 @@ public:
 	void SetSamplingPeriod(uint16_t period);
 	float Read();
 	float ReadFiltered();
+	uint16_t ReadAdcFiltered();
 	uint16_t ReadAdc();
 	void Execute();
 
@@ -83,6 +84,11 @@ inline void CAnalogInput::SetSamplingPeriod(uint16_t period)
 inline uint16_t CAnalogInput::ReadAdc()
 {
 	return m_pAdc->Read();
+}
+
+inline uint16_t CAnalogInput::ReadAdcFiltered()
+{
+	return m_adcDataBuffer.Average();
 }
 
 inline float CAnalogInput::ReadFiltered()
