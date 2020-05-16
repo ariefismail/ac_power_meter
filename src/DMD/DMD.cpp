@@ -551,7 +551,7 @@ void DMD::Execute()
 
 }
 
-void DMD::SetBrighness(float brightness)
+void DMD::SetBrightness(float brightness)
 {
 	if (brightness > 1 || brightness < 0) return;
 	m_brightness = brightness;

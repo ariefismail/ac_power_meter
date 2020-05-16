@@ -1,6 +1,7 @@
 main.cpp:234:40:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	24	static
 main.cpp:292:42:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	16	static
 main.cpp:284:43:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	64	static
+main.cpp:302:37:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	16	static
 main.cpp:239:50:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	40	static
 main.cpp:257:50:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	72	static
 main.cpp:272:45:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	80	static

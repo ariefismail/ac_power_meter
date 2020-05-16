@@ -220,7 +220,7 @@ int main(void)
 
 	Dev.Dmd.SelectFont(Arial_14);
 	Dev.Dmd.Init(2, 1, SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE, 20);
-	Dev.Dmd.SetBrighness(0.8);
+	Dev.Dmd.SetBrightness(0.8);
 	for (uint16_t i = 0; i < 2; i++)
 	{
 		Dev.AnalogInput[i].Initialize(&Adc[i], &MainTimer);
@@ -295,7 +295,16 @@ int main(void)
 		char *token;
 		token = strtok(NULL, DELIMITER);
 		float value = atof(token);
-		Dev.Dmd.SetBrighness(value);
+		Dev.Dmd.SetBrightness(value);
+		*tx=0;
+	};
+
+	auto setText = [](char *rx,char *tx)
+	{
+		const char DELIMITER[2] = ",";
+		char *token;
+		token = strtok(NULL, DELIMITER);
+		Dev.AcDisplay.SetText(token);
 		*tx=0;
 	};
 
@@ -305,6 +314,7 @@ int main(void)
 	Dev.SerialPort.AddFunction(3, readAnalogInput);
 	Dev.SerialPort.AddFunction(4, readFrequency);
 	Dev.SerialPort.AddFunction(5, setBrighness);
+	Dev.SerialPort.AddFunction(6, setText);
 
 	CTimeout Timeout;
 	Timeout.Init(&MainTimer);
@@ -323,11 +333,11 @@ int main(void)
 
 		Dev.HeartBeat.Execute();
 
-		if(Timeout.HasElapsed())
+		if (Timeout.HasElapsed())
 		{
 			Timeout.Reset();
 			char buf[50];
-			sprintf(buf,"%d\r\n",Dev.AnalogInput[0].ReadAdcFiltered());
+			sprintf(buf, "%d\r\n", Dev.AnalogInput[0].ReadAdcFiltered());
 			Uart.Write(buf);
 		}
 	}

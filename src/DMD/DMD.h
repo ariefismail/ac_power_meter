@@ -98,7 +98,7 @@ public:
 	//Insert the calls to this function into the main loop for the highest call rate, or from a timer interrupt
 	void Execute();
 
-	void SetBrighness(float brightness);
+	void SetBrightness(float brightness);
 	void SetRefreshRate(uint16_t refreshRate);
 
 private:
