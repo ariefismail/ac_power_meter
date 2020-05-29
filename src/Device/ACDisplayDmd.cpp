@@ -65,22 +65,32 @@ bool CACDisplayDmd::executeAcDisplay()
 	if (!m_timeout.HasElapsed()) return false;
 	m_timeout.Reset();
 
-	uint16_t freq = (uint16_t)(m_pAcFreqMeter->ReadFrequency() * 100.0);
-	uint16_t freqHigh = freq / 100;
-	uint16_t freqLow = freq % 100;
-	char freqDisplay[20];
-	memset(freqDisplay, 0, sizeof(freqDisplay));
-	sprintf(freqDisplay, "%d.%dHz", freqHigh, freqLow);
+	uint16_t freq = (uint16_t)(m_pAcFreqMeter->ReadFrequency() * 1000.0);
+	uint16_t freqDisplay[4];
+	freqDisplay[0] = freq / 1000;
+	freqDisplay[1] = (freq / 100) % 10;
+	freqDisplay[2] = (freq / 10) % 10;
+	freqDisplay[3] = freq % 10;
+
+	char freqDisplayBuffer[20];
+	memset(freqDisplayBuffer, 0, sizeof(freqDisplayBuffer));
+	sprintf(freqDisplayBuffer, "%d%d.%d%d Hz", freqDisplay[0], freqDisplay[1], freqDisplay[2],
+			freqDisplay[3]);
 	uint16_t acVoltage = (uint16_t)(m_pAcVoltage->ReadFiltered() * 100);
-	uint16_t acVoltageHigh = acVoltage / 100;
-	uint16_t acVoltageLow = acVoltage % 100;
-	char acVoltageDisplay[20];
-	memset(acVoltageDisplay, 0, sizeof(acVoltageDisplay));
-	sprintf(acVoltageDisplay, "%d.%dV", acVoltageHigh, acVoltageLow);
+	uint16_t acVoltageDisplay[5];
+	acVoltageDisplay[0] = acVoltage / 10000;
+	acVoltageDisplay[1] = (acVoltage / 1000) % 10;
+	acVoltageDisplay[2] = (acVoltage / 100) % 10;
+	acVoltageDisplay[3] = (acVoltage / 10) % 10;
+	acVoltageDisplay[4] = acVoltage % 10;
+
+	char acVoltageDisplayBuffer[20];
+	memset(acVoltageDisplayBuffer, 0, sizeof(acVoltageDisplayBuffer));
+	sprintf(acVoltageDisplayBuffer, "%d%d%d.%d%d V", acVoltageDisplay[0], acVoltageDisplay[1],acVoltageDisplay[2],acVoltageDisplay[3],acVoltageDisplay[4]);
 
 //	m_pDmd->ClearScreen(0);
-	m_pDmd->DrawString(0, 0, freqDisplay, strlen(freqDisplay), 0);
-	m_pDmd->DrawString(32, 0, acVoltageDisplay, strlen(acVoltageDisplay), 0);
+	m_pDmd->DrawString(15, -1, freqDisplayBuffer, strlen(freqDisplayBuffer), 0);
+	m_pDmd->DrawString(15, 7, acVoltageDisplayBuffer, strlen(acVoltageDisplayBuffer), 0);
 
 	if (m_TextLenght > 0) loop++;
 	if (loop > 10)

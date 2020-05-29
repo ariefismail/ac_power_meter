@@ -152,20 +152,20 @@ int main(void)
 
 	// ------------------------- Init input capture ------------------------------
 	GPIO_StructInit(&sGpio);
-	sGpio.GPIO_Pin = GPIO_Pin_6; // tim3 channel 1
+	sGpio.GPIO_Pin = GPIO_Pin_7; // tim3 channel 2
 	sGpio.GPIO_Mode = GPIO_Mode_IPU;
 	sGpio.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA, &sGpio);
 
 	TIM_ICInitTypeDef sInputCapture;
 	TIM_ICStructInit(&sInputCapture);
-	sInputCapture.TIM_Channel = TIM_Channel_1;
+	sInputCapture.TIM_Channel = TIM_Channel_2;
 	sInputCapture.TIM_ICSelection = TIM_ICSelection_DirectTI;
 	sInputCapture.TIM_ICPolarity = TIM_ICPolarity_Rising;
-	sInputCapture.TIM_ICFilter = 0xF;
+	sInputCapture.TIM_ICFilter = 0x0;
 	TIM_ICInit(TIM3, &sInputCapture);
 	CSTM32F10xInputCapture InputCapture;
-	InputCapture.Init(TIM3, TIM_Channel_1);
+	InputCapture.Init(TIM3, TIM_Channel_2);
 
 	// ------------------------- Init p10 ------------------------------
 	// spi init
@@ -218,7 +218,7 @@ int main(void)
 	// frequency meter
 	Dev.ACFrequencyMeter.Init(&InputCapture);
 
-	Dev.Dmd.SelectFont(Arial_14);
+	Dev.Dmd.SelectFont(Calibri10);
 	Dev.Dmd.Init(2, 1, SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE, 20);
 	Dev.Dmd.SetBrightness(0.8);
 	for (uint16_t i = 0; i < 2; i++)
@@ -240,54 +240,52 @@ int main(void)
 	{
 		const char DELIMITER[2] = ",";
 		char *token;
-		// fetch string data
-			token = strtok(rx, DELIMITER);
-			uint16_t id = atoi(token);
-			token = strtok(NULL, DELIMITER);
-			float scale = atof(token);
-			token = strtok(NULL, DELIMITER);
-			float offset = atof(token);
 
-			Dev.AnalogInput[id].SetConfig(scale,offset);
+		token = strtok(rx, DELIMITER);
+		uint16_t id = atoi(token);
+		token = strtok(NULL, DELIMITER);
+		float scale = atof(token);
+		token = strtok(NULL, DELIMITER);
+		float offset = atof(token);
 
-			// no returned data
-			*tx=0;
-		};
+		Dev.AnalogInput[id].SetConfig(scale,offset);
+
+		*tx=0;
+	};
 
 	auto getAnalogInputParams = [](char *rx,char *tx)
 	{
 		const char DELIMITER[2] = ",";
 		char *token;
-		// fetch string data
-			token = strtok(rx, DELIMITER);
-			uint16_t id = atoi(token);
-			float scale = 0;
-			float offset = 0;
-			Dev.AnalogInput[id].GetConfig(&scale,&offset);
-			char buf[50];
-			sprintf(buf,"%d,%d\n",(uint16_t)(scale*100),(uint16_t)(offset*100));
-			strcat(tx,buf);
-		};
 
-	auto readAnalogInput = [](char *rx,char *tx)
-	{
-		const char DELIMITER[2] = ",";
-		char *token;
-		// fetch string data
-			token = strtok(rx, DELIMITER);
-			uint16_t id = atoi(token);
-			char buf[50];
-			sprintf(buf,"%d,%d\n",(uint16_t)(Dev.AnalogInput[id].Read()*100),Dev.AnalogInput[id].ReadAdc());
-			strcat(tx,buf);
-		};
+		token = strtok(rx, DELIMITER);
+		uint16_t id = atoi(token);
+		float scale = 0;
+		float offset = 0;
+		Dev.AnalogInput[id].GetConfig(&scale,&offset);
+		char buf[50];
+		sprintf(buf,"%d,%d\n",(uint16_t)(scale*100),(uint16_t)(offset*100));
+		strcat(tx,buf);
+	};
+
+	auto readAnalogInput =
+			[](char *rx,char *tx)
+			{
+				const char DELIMITER[2] = ",";
+				char *token;
+				token = strtok(rx, DELIMITER);
+				uint16_t id = atoi(token);
+				char buf[50];
+				sprintf(buf,"%d,%d\n",(uint16_t)(Dev.AnalogInput[id].ReadFiltered()*100),(uint16_t)Dev.AnalogInput[id].ReadAdcFiltered());
+				strcat(tx,buf);
+			};
 
 	auto readFrequency = [](char *rx,char *tx)
 	{
-		// fetch string data
-			char buf[50];
-			sprintf(buf,"%d\n",(uint16_t)(Dev.ACFrequencyMeter.ReadFrequency()*100));
-			strcat(tx,buf);
-		};
+		char buf[50];
+		sprintf(buf,"%d\n",(uint16_t)(Dev.ACFrequencyMeter.ReadFrequency()*1000));
+		strcat(tx,buf);
+	};
 
 	auto setBrighness = [](char *rx,char *tx)
 	{
@@ -316,9 +314,9 @@ int main(void)
 	Dev.SerialPort.AddFunction(5, setBrighness);
 	Dev.SerialPort.AddFunction(6, setText);
 
-	CTimeout Timeout;
-	Timeout.Init(&MainTimer);
-	Timeout.SetExpiry(10000);
+//	CTimeout Timeout;
+//	Timeout.Init(&MainTimer);
+//	Timeout.SetExpiry(10000);
 	while (1)
 	{
 		Uart.Execute();
@@ -333,13 +331,13 @@ int main(void)
 
 		Dev.HeartBeat.Execute();
 
-		if (Timeout.HasElapsed())
-		{
-			Timeout.Reset();
-			char buf[50];
-			sprintf(buf, "%d\r\n", Dev.AnalogInput[0].ReadAdcFiltered());
-			Uart.Write(buf);
-		}
+//		if (Timeout.HasElapsed())
+//		{
+//			Timeout.Reset();
+//			char buf[50];
+//			sprintf(buf, "%d\r\n", Dev.ACFrequencyMeter.ReadRaw());
+//			Uart.Write(buf);
+//		}
 	}
 }
 

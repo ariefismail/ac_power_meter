@@ -18,6 +18,7 @@
 #include <AnalogInput.h>
 #include <ACDisplayDmd.h>
 #include <Communication/SerialPort.h>
+#include <DMD/font.h>
 
 class SDevice
 {

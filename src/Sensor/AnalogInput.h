@@ -24,24 +24,24 @@ public:
 	void SetSamplingPeriod(uint16_t period);
 	float Read();
 	float ReadFiltered();
-	uint16_t ReadAdcFiltered();
+	float ReadAdcFiltered();
 	uint16_t ReadAdc();
 	void Execute();
 
 private:
-	static const uint16_t MAX_MOV_AVG_BUFFER = 20;
+	static const uint16_t MAX_MOV_AVG_BUFFER = 100;
 	float m_Scale;
 	float m_Offset;
 	CTimeout m_Timeout;
 	ITimer *m_pTimer;
 	IAdc* m_pAdc;
-	CMovAvgBuffer<uint16_t, uint16_t, MAX_MOV_AVG_BUFFER> m_adcDataBuffer;
+	CMovAvgBuffer<uint16_t, uint32_t, MAX_MOV_AVG_BUFFER> m_adcDataBuffer;
 };
 
 inline CAnalogInput::CAnalogInput()
 {
 	m_pAdc = NULL;
-	m_Scale = 1;
+	m_Scale = 0.06378600823045268;
 	m_Offset = 0;
 	m_pTimer = NULL;
 }
@@ -56,12 +56,13 @@ inline void CAnalogInput::Initialize(IAdc* pAdc, ITimer *pTimer)
 	m_pAdc = pAdc;
 	m_pTimer = pTimer;
 	m_Timeout.Init(m_pTimer);
+	m_Timeout.SetExpiry(100);
 	m_adcDataBuffer.Clear();
 }
 
 inline float CAnalogInput::Read()
 {
-	return m_Scale * m_pAdc->Read() + m_Offset;
+	return m_Scale * Read() + m_Offset;
 }
 
 inline void CAnalogInput::SetConfig(float scale, float offset)
@@ -86,7 +87,7 @@ inline uint16_t CAnalogInput::ReadAdc()
 	return m_pAdc->Read();
 }
 
-inline uint16_t CAnalogInput::ReadAdcFiltered()
+inline float CAnalogInput::ReadAdcFiltered()
 {
 	return m_adcDataBuffer.Average();
 }

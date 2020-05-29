@@ -9,6 +9,14 @@ import signal
 import sys
 import threading
 
+# import PySimpleGUI as sg
+
+# sg.theme('DarkAmber')	# Add a touch of color
+# # All the stuff inside your window.
+# layout = [  [sg.Text('Some text on Row 1')],
+#             [sg.Text('Enter something on Row 2'), sg.InputText()],
+#             [sg.Button('Ok'), sg.Button('Cancel')] ]
+
 is_running = False
 
 def get_serial_port():
@@ -70,4 +78,8 @@ def read_frequency():
     
 def set_brightness(value):
     send_data = '{0},{1},\n'.format(5,value)
+    ser.write(send_data)
+
+def set_text(text):
+    send_data = '{0},{1},\n'.format(6,text)
     ser.write(send_data)
