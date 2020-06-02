@@ -7255,7 +7255,7 @@ inline uint16_t CMovAvgBuffer<ELEMTYPE, SUMTYPE, BUFFSIZE>::Count(void) const
  800329c:	491e      	ldr	r1, [pc, #120]	; (8003318 <_ZN13CACDisplayDmd16executeAcDisplayEv+0x1dc>)
  800329e:	a806      	add	r0, sp, #24
  80032a0:	f001 fac7 	bl	8004832 <siprintf>
-	m_pDmd->DrawString(15, -1, freqDisplayBuffer, strlen(freqDisplayBuffer), 0);
+	m_pDmd->DrawString(15, 7, freqDisplayBuffer, strlen(freqDisplayBuffer), 0);
  80032a4:	6a3c      	ldr	r4, [r7, #32]
  80032a6:	a80b      	add	r0, sp, #44	; 0x2c
  80032a8:	f7fc ff52 	bl	8000150 <strlen>
@@ -7263,19 +7263,19 @@ inline uint16_t CMovAvgBuffer<ELEMTYPE, SUMTYPE, BUFFSIZE>::Count(void) const
  80032ae:	9501      	str	r5, [sp, #4]
  80032b0:	9000      	str	r0, [sp, #0]
  80032b2:	ab0b      	add	r3, sp, #44	; 0x2c
- 80032b4:	f04f 32ff 	mov.w	r2, #4294967295
- 80032b8:	210f      	movs	r1, #15
- 80032ba:	4620      	mov	r0, r4
- 80032bc:	f7ff fd4c 	bl	8002d58 <_ZN3DMD10DrawStringEssPKchh>
-	m_pDmd->DrawString(15, 7, acVoltageDisplayBuffer, strlen(acVoltageDisplayBuffer), 0);
- 80032c0:	6a3c      	ldr	r4, [r7, #32]
- 80032c2:	a806      	add	r0, sp, #24
- 80032c4:	f7fc ff44 	bl	8000150 <strlen>
- 80032c8:	b2c0      	uxtb	r0, r0
- 80032ca:	9501      	str	r5, [sp, #4]
- 80032cc:	9000      	str	r0, [sp, #0]
- 80032ce:	ab06      	add	r3, sp, #24
- 80032d0:	2207      	movs	r2, #7
+ 80032b4:	2207      	movs	r2, #7
+ 80032b6:	210f      	movs	r1, #15
+ 80032b8:	4620      	mov	r0, r4
+ 80032ba:	f7ff fd4d 	bl	8002d58 <_ZN3DMD10DrawStringEssPKchh>
+	m_pDmd->DrawString(15, -1, acVoltageDisplayBuffer, strlen(acVoltageDisplayBuffer), 0);
+ 80032be:	6a3c      	ldr	r4, [r7, #32]
+ 80032c0:	a806      	add	r0, sp, #24
+ 80032c2:	f7fc ff45 	bl	8000150 <strlen>
+ 80032c6:	b2c0      	uxtb	r0, r0
+ 80032c8:	9501      	str	r5, [sp, #4]
+ 80032ca:	9000      	str	r0, [sp, #0]
+ 80032cc:	ab06      	add	r3, sp, #24
+ 80032ce:	f04f 32ff 	mov.w	r2, #4294967295
  80032d2:	210f      	movs	r1, #15
  80032d4:	4620      	mov	r0, r4
  80032d6:	f7ff fd3f 	bl	8002d58 <_ZN3DMD10DrawStringEssPKchh>
@@ -7589,7 +7589,7 @@ inline CAnalogInput::CAnalogInput()
 	m_pAdc = NULL;
  80034b6:	2300      	movs	r3, #0
  80034b8:	622b      	str	r3, [r5, #32]
-	m_Scale = 0.06378600823045268;
+	m_Scale = 0.059;
  80034ba:	4a11      	ldr	r2, [pc, #68]	; (8003500 <_Z41__static_initialization_and_destruction_0ii+0x80>)
  80034bc:	606a      	str	r2, [r5, #4]
 	m_Offset = 0;
@@ -7616,7 +7616,7 @@ inline CAnalogInput::CAnalogInput()
  80034f6:	e7cc      	b.n	8003492 <_Z41__static_initialization_and_destruction_0ii+0x12>
  80034f8:	200006ac 	.word	0x200006ac
  80034fc:	08006e54 	.word	0x08006e54
- 8003500:	3d82a23d 	.word	0x3d82a23d
+ 8003500:	3d71a9fc 	.word	0x3d71a9fc
  8003504:	20000000 	.word	0x20000000
  8003508:	0800351b 	.word	0x0800351b
 

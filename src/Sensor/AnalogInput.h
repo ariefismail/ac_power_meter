@@ -41,7 +41,7 @@ private:
 inline CAnalogInput::CAnalogInput()
 {
 	m_pAdc = NULL;
-	m_Scale = 0.06378600823045268;
+	m_Scale = 0.059;
 	m_Offset = 0;
 	m_pTimer = NULL;
 }

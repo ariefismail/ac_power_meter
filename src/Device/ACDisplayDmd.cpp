@@ -89,8 +89,8 @@ bool CACDisplayDmd::executeAcDisplay()
 	sprintf(acVoltageDisplayBuffer, "%d%d%d.%d%d V", acVoltageDisplay[0], acVoltageDisplay[1],acVoltageDisplay[2],acVoltageDisplay[3],acVoltageDisplay[4]);
 
 //	m_pDmd->ClearScreen(0);
-	m_pDmd->DrawString(15, -1, freqDisplayBuffer, strlen(freqDisplayBuffer), 0);
-	m_pDmd->DrawString(15, 7, acVoltageDisplayBuffer, strlen(acVoltageDisplayBuffer), 0);
+	m_pDmd->DrawString(15, 7, freqDisplayBuffer, strlen(freqDisplayBuffer), 0);
+	m_pDmd->DrawString(15, -1, acVoltageDisplayBuffer, strlen(acVoltageDisplayBuffer), 0);
 
 	if (m_TextLenght > 0) loop++;
 	if (loop > 10)
