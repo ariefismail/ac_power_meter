@@ -19,6 +19,8 @@
 #include <ACDisplayDmd.h>
 #include <Communication/SerialPort.h>
 #include <DMD/font.h>
+#include <array>
+
 
 class SDevice
 {
@@ -26,7 +28,7 @@ public:
 	SDevice* Inst();
 
 	CHeartBeat HeartBeat;
-	CAnalogInput AnalogInput[2];
+	std::array<CAnalogInput,2> AnalogInput;
 	DMD Dmd;
 	CACDisplayDmd AcDisplay;
 	CACFrequencyMeter ACFrequencyMeter;

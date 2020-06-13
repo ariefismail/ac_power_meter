@@ -29,7 +29,7 @@ private:
 	static const uint16_t MAX_BUFFER = 322;
 	char m_buffer[MAX_BUFFER];
 	uint16_t m_index;
-	static const uint8_t MAX_OPCODE = 10;
+	static const uint8_t MAX_OPCODE = 20;
 
 	// our argument is input string and output string
 	void (*m_pFunc[MAX_OPCODE])(char*, char*);

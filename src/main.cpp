@@ -3,6 +3,7 @@
 #include "stm32f10x.h"
 
 #include <Hal.h>
+#include <Storage/Storage.h>
 #include <STM32F10xTimer.h>
 #include <STM32F10xUSART.h>
 #include <STM32F10xGpio.h>
@@ -216,8 +217,8 @@ int main(void)
 
 	// init our basic need !
 	// frequency meter
-	Dev.ACFrequencyMeter.Init(&InputCapture,&GpioAlarm);
-	Dev.ACFrequencyMeter.SetAlarmThreshold(51.0,49.0);
+	Dev.ACFrequencyMeter.Init(&InputCapture, &GpioAlarm);
+	Dev.ACFrequencyMeter.SetAlarmThreshold(51.0, 49.0);
 
 	Dev.Dmd.SelectFont(Calibri10);
 	Dev.Dmd.Init(2, 1, SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE, 20);
@@ -235,6 +236,16 @@ int main(void)
 	auto getAppName = [](char *rx,char *tx)
 	{
 		strcat(tx,"AC POWER METER INDO-WARE\n");
+	};
+
+	auto saveConfig = [](char *rx,char *tx)
+	{
+		Storage.Save();
+	};
+
+	auto reset = [](char *rx,char *tx)
+	{
+		NVIC_SystemReset();
 	};
 
 	auto setAnalogInputParams = [](char *rx,char *tx)
@@ -307,13 +318,45 @@ int main(void)
 		*tx=0;
 	};
 
+	auto setAlarmFreqThreshold = [](char *rx,char *tx)
+	{
+		const char DELIMITER[2] = ",";
+		char *token;
+
+		token = strtok(rx, DELIMITER);
+		float upper = atof(token);
+		token = strtok(NULL, DELIMITER);
+		float lower = atof(token);
+
+		Dev.ACFrequencyMeter.SetAlarmThreshold(upper,lower);
+
+		*tx=0;
+	};
+
+	auto getAlarmFreqThreshold = [](char *rx,char *tx)
+	{
+
+		float upper = 0;
+		float lower = 0;
+		Dev.ACFrequencyMeter.GetAlarmThreshold(&upper,&lower);
+		char buf[50];
+		sprintf(buf,"%d,%d\n",(uint16_t)(upper*100),(uint16_t)(lower*100));
+		strcat(tx,buf);
+	};
+
 	Dev.SerialPort.AddFunction(0, getAppName);
-	Dev.SerialPort.AddFunction(1, setAnalogInputParams);
-	Dev.SerialPort.AddFunction(2, getAnalogInputParams);
-	Dev.SerialPort.AddFunction(3, readAnalogInput);
-	Dev.SerialPort.AddFunction(4, readFrequency);
-	Dev.SerialPort.AddFunction(5, setBrighness);
-	Dev.SerialPort.AddFunction(6, setText);
+	Dev.SerialPort.AddFunction(1, saveConfig);
+	Dev.SerialPort.AddFunction(2, reset);
+	Dev.SerialPort.AddFunction(3, setAnalogInputParams);
+	Dev.SerialPort.AddFunction(4, getAnalogInputParams);
+	Dev.SerialPort.AddFunction(5, readAnalogInput);
+	Dev.SerialPort.AddFunction(6, readFrequency);
+	Dev.SerialPort.AddFunction(7, setBrighness);
+	Dev.SerialPort.AddFunction(8, setText);
+	Dev.SerialPort.AddFunction(9, setAlarmFreqThreshold);
+	Dev.SerialPort.AddFunction(10, getAlarmFreqThreshold);
+
+	Storage.Load();
 
 	while (1)
 	{

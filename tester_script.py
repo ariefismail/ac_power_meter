@@ -60,26 +60,40 @@ if __name__ == '__main__':
 def get_app_name():
     ser.write('0,\n')
 
+def save_config():
+    ser.write('1,\n')
+
+def reset_firmware():
+    ser.write('2,\n')
+
 def set_aux_in_params(id,scale,offset):
-    send_data = '{0},{1},{2},{3},\n'.format(1,id,scale,offset)
+    send_data = '{0},{1},{2},{3},\n'.format(3,id,scale,offset)
     ser.write(send_data)
 
 def get_aux_in_params(id):
-    send_data = '{0},{1},\n'.format(2,id)
+    send_data = '{0},{1},\n'.format(4,id)
     ser.write(send_data)
 
 def read_aux_in(id):
-    send_data = '{0},{1},\n'.format(3,id)
+    send_data = '{0},{1},\n'.format(5,id)
     ser.write(send_data)
 
 def read_frequency():
-    send_data = '{0},\n'.format(4)
+    send_data = '{0},\n'.format(6)
     ser.write(send_data)
     
 def set_brightness(value):
-    send_data = '{0},{1},\n'.format(5,value)
+    send_data = '{0},{1},\n'.format(7,value)
     ser.write(send_data)
 
 def set_text(text):
-    send_data = '{0},{1},\n'.format(6,text)
+    send_data = '{0},{1},\n'.format(8,text)
+    ser.write(send_data)
+
+def set_alarm_freq_threshold(upper,lower):
+    send_data = '{0},{1},{2},\n'.format(9,upper,lower)
+    ser.write(send_data)
+
+def get_alarm_freq_threshold():
+    send_data = '{0},\n'.format(10)
     ser.write(send_data)
