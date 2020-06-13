@@ -5685,7 +5685,7 @@ LOAD c:/program files (x86)/atollic/truestudio for stm32 9.3.0/armtools/bin/../l
                 0x00000d26       0x1d c:/program files (x86)/atollic/truestudio for stm32 9.3.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/armv7-m/crtn.o
 OUTPUT(ac_power.elf elf32-littlearm)
 
-.debug_info     0x00000000    0x3b486
+.debug_info     0x00000000    0x3b48d
  .debug_info    0x00000000      0xb87 Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_adc.o
  .debug_info    0x00000b87      0x486 Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dma.o
  .debug_info    0x0000100d      0x7c8 Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_flash.o
@@ -5708,11 +5708,11 @@ OUTPUT(ac_power.elf elf32-littlearm)
  .debug_info    0x0002701a     0x2edd src\Sensor\ACFrequencyMeter.o
  .debug_info    0x00029ef7     0x58cf src\Storage\Storage.o
  .debug_info    0x0002f7c6     0x2582 src\Utilities\Timeout.o
- .debug_info    0x00031d48     0x844a src\main.o
- .debug_info    0x0003a192       0x68 src\startup_stm32f10x_md.o
- .debug_info    0x0003a1fa      0x154 src\stm32f1xx_it.o
- .debug_info    0x0003a34e      0x4a7 src\system_stm32f10x.o
- .debug_info    0x0003a7f5      0xc91 src\tiny_printf.o
+ .debug_info    0x00031d48     0x8451 src\main.o
+ .debug_info    0x0003a199       0x68 src\startup_stm32f10x_md.o
+ .debug_info    0x0003a201      0x154 src\stm32f1xx_it.o
+ .debug_info    0x0003a355      0x4a7 src\system_stm32f10x.o
+ .debug_info    0x0003a7fc      0xc91 src\tiny_printf.o
 
 .debug_abbrev   0x00000000     0x6e03
  .debug_abbrev  0x00000000      0x1ab Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_adc.o
@@ -6011,7 +6011,7 @@ OUTPUT(ac_power.elf elf32-littlearm)
  .debug_frame   0x00004b20       0x24 c:/program files (x86)/atollic/truestudio for stm32 9.3.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/armv7-m\libgcc.a(_arm_fixunssfsi.o)
  .debug_frame   0x00004b44       0x20 c:/program files (x86)/atollic/truestudio for stm32 9.3.0/armtools/bin/../lib/gcc/arm-atollic-eabi/6.3.1/../../../../arm-atollic-eabi/lib/armv7-m\libnosys.a(sbrk.o)
 
-.debug_loc      0x00000000     0x3434
+.debug_loc      0x00000000     0x343f
  .debug_loc     0x00000000      0x180 src\Communication\SerialPort.o
  .debug_loc     0x00000180     0x164e src\DMD\DMD.o
  .debug_loc     0x000017ce      0x27a src\Device\ACDisplayDmd.o
@@ -6026,7 +6026,7 @@ OUTPUT(ac_power.elf elf32-littlearm)
  .debug_loc     0x0000263c      0x37e src\Sensor\ACFrequencyMeter.o
  .debug_loc     0x000029ba      0x2a1 src\Storage\Storage.o
  .debug_loc     0x00002c5b       0xb2 src\Utilities\Timeout.o
- .debug_loc     0x00002d0d      0x727 src\main.o
+ .debug_loc     0x00002d0d      0x732 src\main.o
 
 .debug_macro    0x00000000    0x1464f
  .debug_macro   0x00000000      0x52f src\Communication\SerialPort.o

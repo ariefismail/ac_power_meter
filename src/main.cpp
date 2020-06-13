@@ -333,7 +333,7 @@ int main(void)
 
 		Dev.ACFrequencyMeter.SetAlarmThreshold(upper,lower);
 		Storage.Params.UpperAlarmFreq=upper;
-		Storage.Params.LowerAlarmFreq=upper;
+		Storage.Params.LowerAlarmFreq=lower;
 		*tx=0;
 	};
 
