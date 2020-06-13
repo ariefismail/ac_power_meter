@@ -261,6 +261,8 @@ int main(void)
 		float offset = atof(token);
 
 		Dev.AnalogInput[id].SetConfig(scale,offset);
+		Storage.Params.Scale[id]=scale;
+		Storage.Params.Offset[id]=offset;
 
 		*tx=0;
 	};
@@ -306,6 +308,7 @@ int main(void)
 		token = strtok(NULL, DELIMITER);
 		float value = atof(token);
 		Dev.Dmd.SetBrightness(value);
+		Storage.Params.Brightness=value;
 		*tx=0;
 	};
 
@@ -329,7 +332,8 @@ int main(void)
 		float lower = atof(token);
 
 		Dev.ACFrequencyMeter.SetAlarmThreshold(upper,lower);
-
+		Storage.Params.UpperAlarmFreq=upper;
+		Storage.Params.LowerAlarmFreq=upper;
 		*tx=0;
 	};
 

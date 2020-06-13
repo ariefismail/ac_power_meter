@@ -27,7 +27,7 @@ public:
 		float UpperAlarmFreq;
 		float LowerAlarmFreq;
 		float Brightness;
-	} m_Param;
+	} Params;
 
 	void Save();
 	void Load();
@@ -35,7 +35,7 @@ public:
 
 	CStorage()
 	{
-		memset(&m_Param,0,sizeof(m_Param));
+		memset(&Params,0,sizeof(Params));
 	}
 	;
 	~CStorage()
