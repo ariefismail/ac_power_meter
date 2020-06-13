@@ -50,19 +50,19 @@ int main(void)
 	sGpio.GPIO_Mode = GPIO_Mode_Out_OD;
 	GPIO_Init(GPIOC, &sGpio); // pc13
 
+	// buzzer
+	sGpio.GPIO_Pin = GPIO_Pin_3;
+	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
+	sGpio.GPIO_Mode = GPIO_Mode_Out_OD;
+	GPIO_Init(GPIOB, &sGpio); // PB3
+	CSTM32F10xGpio GpioAlarm;
+	GpioAlarm.Init(GPIOB, 3);
+
 	CSTM32F10xTimer MainTimer;
 	MainTimer.Init(TIM2);
 	CSTM32F10xGpio GpioHeartBeat;
 	GpioHeartBeat.Init(GPIOC, 13);
 	Dev.HeartBeat.Init(&GpioHeartBeat, &MainTimer, 5000);
-
-	// --------------------------------------------------------------------
-
-	// --------------- INIT EEPROM ----------------------------------------
-//	sGpio.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7; // sda1 scl1
-//	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
-//	sGpio.GPIO_Mode = GPIO_Mode_AF_OD;
-//	GPIO_Init(GPIOB, &sGpio);
 
 	// --------------------------------------------------------------------
 
@@ -216,7 +216,8 @@ int main(void)
 
 	// init our basic need !
 	// frequency meter
-	Dev.ACFrequencyMeter.Init(&InputCapture);
+	Dev.ACFrequencyMeter.Init(&InputCapture,&GpioAlarm);
+	Dev.ACFrequencyMeter.SetAlarmThreshold(51.0,49.0);
 
 	Dev.Dmd.SelectFont(Calibri10);
 	Dev.Dmd.Init(2, 1, SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE, 20);
@@ -314,9 +315,6 @@ int main(void)
 	Dev.SerialPort.AddFunction(5, setBrighness);
 	Dev.SerialPort.AddFunction(6, setText);
 
-//	CTimeout Timeout;
-//	Timeout.Init(&MainTimer);
-//	Timeout.SetExpiry(10000);
 	while (1)
 	{
 		Uart.Execute();
@@ -331,13 +329,6 @@ int main(void)
 
 		Dev.HeartBeat.Execute();
 
-//		if (Timeout.HasElapsed())
-//		{
-//			Timeout.Reset();
-//			char buf[50];
-//			sprintf(buf, "%d\r\n", Dev.ACFrequencyMeter.ReadRaw());
-//			Uart.Write(buf);
-//		}
 	}
 }
 
