@@ -221,7 +221,7 @@ int main(void)
 	Dev.ACFrequencyMeter.Init(&InputCapture, &GpioAlarm);
 //	Dev.ACFrequencyMeter.SetAlarmThreshold(51.0, 49.0);
 
-	Dev.Dmd.SelectFont(Calibri10);
+	Dev.Dmd.SelectFont(TimesNewRoman10);
 	Dev.Dmd.Init(2, 1, SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE, 20);
 //	Dev.Dmd.SetBrightness(0.8);
 	for (uint16_t i = 0; i < 2; i++)

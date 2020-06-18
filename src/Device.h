@@ -11,9 +11,6 @@
 #include <Hal.h>
 #include <HeartBeat.h>
 #include <DMD/DMD.h>
-#include <DMD/SystemFont5x7.h>
-#include <DMD/Arial_black_16.h>
-#include <DMD/Arial14.h>
 #include <ACFrequencyMeter.h>
 #include <AnalogInput.h>
 #include <ACDisplayDmd.h>
