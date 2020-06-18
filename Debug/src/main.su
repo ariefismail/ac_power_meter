@@ -1,12 +1,12 @@
 main.cpp:246:35:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	0	static
 main.cpp:236:40:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	24	static
 main.cpp:241:40:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	8	static
-main.cpp:304:42:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	24	static
-main.cpp:324:51:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	24	static
 main.cpp:251:50:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	32	static
 main.cpp:270:50:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	72	static
 main.cpp:297:43:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	64	static
+main.cpp:304:42:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	24	static
 main.cpp:315:37:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	16	static
+main.cpp:324:51:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	24	static
 main.cpp:340:51:static void main()::<lambda(char*, char*)>::_FUN(char*, char*)	80	static
 CircularBuffer.h:123:6:void CCircularBuffer<ELEMTYPE, BUFFSIZE>::Clear() [with ELEMTYPE = short unsigned int; short unsigned int BUFFSIZE = 100u]	0	static
 MovAvgBuffer.h:81:6:void CMovAvgBuffer<ELEMTYPE, SUMTYPE, BUFFSIZE>::Clear() [with ELEMTYPE = short unsigned int; SUMTYPE = long unsigned int; short unsigned int BUFFSIZE = 100u]	8	static

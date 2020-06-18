@@ -52,9 +52,10 @@ int main(void)
 	GPIO_Init(GPIOC, &sGpio); // pc13
 
 	// buzzer
+	GPIO_StructInit(&sGpio);
 	sGpio.GPIO_Pin = GPIO_Pin_3;
 	sGpio.GPIO_Speed = GPIO_Speed_2MHz;
-	sGpio.GPIO_Mode = GPIO_Mode_Out_OD;
+	sGpio.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOB, &sGpio); // PB3
 	CSTM32F10xGpio GpioAlarm;
 	GpioAlarm.Init(GPIOB, 3);
@@ -218,11 +219,11 @@ int main(void)
 	// init our basic need !
 	// frequency meter
 	Dev.ACFrequencyMeter.Init(&InputCapture, &GpioAlarm);
-	Dev.ACFrequencyMeter.SetAlarmThreshold(51.0, 49.0);
+//	Dev.ACFrequencyMeter.SetAlarmThreshold(51.0, 49.0);
 
 	Dev.Dmd.SelectFont(Calibri10);
 	Dev.Dmd.Init(2, 1, SPI2, &SpiDma, &MainTimer, &pSS, &pA, &pB, &pOE, 20);
-	Dev.Dmd.SetBrightness(0.8);
+//	Dev.Dmd.SetBrightness(0.8);
 	for (uint16_t i = 0; i < 2; i++)
 	{
 		Dev.AnalogInput[i].Initialize(&Adc[i], &MainTimer);
